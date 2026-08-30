@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../core_export.dart';
 
@@ -14,9 +15,10 @@ class CustomButton extends StatelessWidget {
     this.isOutlined = false,
     this.isLoading = false,
     this.isExpanding = true,
-    this.borderRadius = 24.0,
+    this.borderRadius = 12.0,
     this.borderColor,
     this.textStyle,
+    this.img,
   });
 
   final String text;
@@ -25,6 +27,7 @@ class CustomButton extends StatelessWidget {
   final Color? textColor;
   final Color? iconColor;
   final IconData? icon;
+  final String? img;
   final bool isOutlined;
   final bool isLoading;
   final bool isExpanding;
@@ -73,6 +76,7 @@ class CustomButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (img != null) ...[SvgPicture.asset(img!), space12W],
                   Text(
                     text,
                     style:

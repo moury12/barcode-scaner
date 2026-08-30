@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
-import '../widgets/auth_role_badge.dart';
 
 class RegisterPage extends ConsumerWidget {
   const RegisterPage({super.key});
@@ -18,18 +16,26 @@ class RegisterPage extends ConsumerWidget {
           onPressed: () => context.pop(),
         ),
         actions: [
-          TextButton(
-            onPressed: () =>
-                ref.read(onboardingStepProvider.notifier).setStep(5),
-            child: const CustomText(
-              AppStaticStrings.changeRole,
-              color: AppColors.kYellowColor,
+          ButtonTapWidget(
+            onTap: () {
+              // 1. Update the state to Step 5 (Role Selection)
+              ref.read(onboardingStepProvider.notifier).setStep(5);
+
+              // 2. Navigate back to the Splash route where Step 5 is rendered
+              context.go(AppRoutes.splash);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: const CustomText(
+                AppStaticStrings.changeRole,
+                color: AppColors.kAccentColor,
+              ),
             ),
           ),
         ],
       ),
       body: SingleChildScrollView(
-        padding: AppPadding.getPadding12(context),
+        padding: AppPadding.getPadding12H(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -51,38 +57,45 @@ class RegisterPage extends ConsumerWidget {
             if (!isShop) ...[
               const CustomTextField(
                 hintText: AppStaticStrings.fullName,
+                title: AppStaticStrings.fullName,
                 prefixIcon: Icon(Icons.person_outline, size: 20),
               ),
             ] else ...[
               const CustomTextField(
                 hintText: AppStaticStrings.ownerName,
+                title: AppStaticStrings.ownerName,
                 prefixIcon: Icon(Icons.person_outline, size: 20),
               ),
               space12H,
               const CustomTextField(
                 hintText: AppStaticStrings.shopName,
+                title: AppStaticStrings.shopName,
                 prefixIcon: Icon(Icons.storefront_outlined, size: 20),
               ),
             ],
             space12H,
             CustomTextField(
               hintText: isShop ? AppStaticStrings.businessEmail : "Email",
+              title: isShop ? AppStaticStrings.businessEmail : "Email",
               prefixIcon: const Icon(Icons.email_outlined, size: 20),
             ),
             space12H,
             const CustomTextField(
               hintText: AppStaticStrings.phoneNumber,
+              title: AppStaticStrings.phoneNumber,
               prefixIcon: Icon(Icons.phone_outlined, size: 20),
             ),
             space12H,
             const CustomTextField(
               hintText: AppStaticStrings.password,
+              title: AppStaticStrings.password,
               isPassword: true,
               prefixIcon: Icon(Icons.lock_outline, size: 20),
             ),
             space12H,
             const CustomTextField(
               hintText: AppStaticStrings.confirmPassword,
+              title: AppStaticStrings.confirmPassword,
               isPassword: true,
               prefixIcon: Icon(Icons.lock_reset, size: 20),
             ),
@@ -105,7 +118,7 @@ class RegisterPage extends ConsumerWidget {
                       TextSpan(
                         text: AppStaticStrings.logIn,
                         style: TextStyle(
-                          color: AppColors.kYellowColor,
+                          color: AppColors.kAccentColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

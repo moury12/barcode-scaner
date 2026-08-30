@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../../../../src_export.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
@@ -20,7 +19,7 @@ class ForgotPasswordPage extends StatelessWidget {
             padding: AppPadding.getPadding16(context),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.05),
@@ -59,11 +58,14 @@ class ForgotPasswordPage extends StatelessWidget {
                   onPressed: () => context.push(AppRoutes.resetPassword),
                 ),
                 space12H,
-                TextButton(
-                  onPressed: () => context.pop(),
-                  child: const CustomText(
-                    "Back to Login",
-                    color: AppColors.kYellowColor,
+                ButtonTapWidget(
+                  onTap: () => context.pop(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const CustomText(
+                      "Back to Login",
+                      color: AppColors.kAccentColor,
+                    ),
                   ),
                 ),
               ],

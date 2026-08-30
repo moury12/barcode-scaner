@@ -10,18 +10,21 @@ class AuthRoleBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: AppColors.kPrimaryColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(isCustomer ? Icons.person_outline : Icons.storefront_outlined, size: 14),
+          Icon(
+            isCustomer ? Icons.person_outline : Icons.storefront_outlined,
+            size: 14,
+          ),
           space4W,
           CustomText(
-            isCustomer ? 'CUSTOMER' : 'SHOP OWNER', 
-            fontSize: 10, 
-            fontWeight: FontWeight.bold, 
+            isCustomer ? 'CUSTOMER' : 'SHOP OWNER',
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
             color: Colors.black54,
           ),
         ],

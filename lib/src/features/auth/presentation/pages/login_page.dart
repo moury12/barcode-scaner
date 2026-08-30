@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
-import '../widgets/auth_role_badge.dart';
 
 class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
@@ -17,9 +15,9 @@ class LoginPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              space16H,
+              space12H,
               AuthRoleBadge(role: role),
-              space16H,
+              space12H,
               const CustomText(
                 AppStaticStrings.welcomeBack,
                 variant: TextVariant.headlineLarge,
@@ -31,7 +29,7 @@ class LoginPage extends ConsumerWidget {
                 variant: TextVariant.bodyMedium,
                 color: AppColors.kBrownTextColor,
               ),
-              space16H,
+              space12H,
               const CustomTextField(
                 hintText: AppStaticStrings.emailOrPhone,
                 prefixIcon: Icon(Icons.mail_outline, size: 20),
@@ -44,18 +42,18 @@ class LoginPage extends ConsumerWidget {
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () => context.push(AppRoutes.forgotPassword),
+                child: ButtonTapWidget(
+                  onTap: () => context.push(AppRoutes.forgotPassword),
                   child: const CustomText(
                     AppStaticStrings.forgotPassword,
-                    color: AppColors.kYellowColor,
+                    color: AppColors.kAccentColor,
                     variant: TextVariant.labelLarge,
                   ),
                 ),
               ),
               space12H,
               CustomButton(text: AppStaticStrings.logIn, onPressed: () {}),
-              space16H,
+              space12H,
               Center(
                 child: GestureDetector(
                   onTap: () => context.push(AppRoutes.register),
@@ -69,7 +67,7 @@ class LoginPage extends ConsumerWidget {
                         TextSpan(
                           text: AppStaticStrings.signUp,
                           style: TextStyle(
-                            color: AppColors.kYellowColor,
+                            color: AppColors.kAccentColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -78,7 +76,7 @@ class LoginPage extends ConsumerWidget {
                   ),
                 ),
               ),
-              space16H,
+              space12H,
               const Row(
                 children: [
                   Expanded(child: Divider()),
@@ -89,10 +87,11 @@ class LoginPage extends ConsumerWidget {
                   Expanded(child: Divider()),
                 ],
               ),
-              space16H,
+              space12H,
               CustomButton(
                 text: "Continue with Google",
                 isOutlined: true,
+                img: AppStaticStrings.googleIcon,
                 borderColor: AppColors.kBorderColor.withValues(alpha: 0.3),
                 textColor: Colors.black,
                 onPressed: () {},
@@ -101,6 +100,8 @@ class LoginPage extends ConsumerWidget {
               CustomButton(
                 text: "Continue with Apple",
                 isOutlined: true,
+                img: AppStaticStrings.appleIcon,
+
                 borderColor: AppColors.kBorderColor.withValues(alpha: 0.3),
                 textColor: Colors.black,
                 onPressed: () {},
