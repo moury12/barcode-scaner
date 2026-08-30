@@ -13,7 +13,7 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.kBackgroundColor,
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.kBackgroundColor,
-      foregroundColor: AppColors.kTextColor,
+      foregroundColor: AppColors.kPrimaryColor,
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(

@@ -20,18 +20,37 @@ class LoginPage extends ConsumerWidget {
               space16H,
               AuthRoleBadge(role: role),
               space16H,
-              const CustomText(AppStaticStrings.welcomeBack, variant: TextVariant.headlineLarge, fontWeight: FontWeight.bold),
+              const CustomText(
+                AppStaticStrings.welcomeBack,
+                variant: TextVariant.headlineLarge,
+                fontWeight: FontWeight.bold,
+              ),
               space8H,
-              const CustomText(AppStaticStrings.loginSubtitle, variant: TextVariant.bodyMedium, color: AppColors.kGreyTextColor),
+              const CustomText(
+                AppStaticStrings.loginSubtitle,
+                variant: TextVariant.bodyMedium,
+                color: AppColors.kBrownTextColor,
+              ),
               space16H,
-              const CustomTextField(hintText: AppStaticStrings.emailOrPhone, prefixIcon: Icon(Icons.mail_outline, size: 20)),
+              const CustomTextField(
+                hintText: AppStaticStrings.emailOrPhone,
+                prefixIcon: Icon(Icons.mail_outline, size: 20),
+              ),
               space12H,
-              const CustomTextField(hintText: AppStaticStrings.password, isPassword: true, prefixIcon: Icon(Icons.lock_outline, size: 20)),
+              const CustomTextField(
+                hintText: AppStaticStrings.password,
+                isPassword: true,
+                prefixIcon: Icon(Icons.lock_outline, size: 20),
+              ),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () => context.push(AppRoutes.forgotPassword),
-                  child: const CustomText(AppStaticStrings.forgotPassword, color: AppColors.kYellowColor, variant: TextVariant.labelLarge),
+                  child: const CustomText(
+                    AppStaticStrings.forgotPassword,
+                    color: AppColors.kYellowColor,
+                    variant: TextVariant.labelLarge,
+                  ),
                 ),
               ),
               space12H,
@@ -43,20 +62,49 @@ class LoginPage extends ConsumerWidget {
                   child: RichText(
                     text: TextSpan(
                       text: AppStaticStrings.dontHaveAccount,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.kGreyTextColor),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.kBrownTextColor,
+                      ),
                       children: const [
-                        TextSpan(text: AppStaticStrings.signUp, style: TextStyle(color: AppColors.kYellowColor, fontWeight: FontWeight.bold)),
+                        TextSpan(
+                          text: AppStaticStrings.signUp,
+                          style: TextStyle(
+                            color: AppColors.kYellowColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
               space16H,
-              const Row(children: [Expanded(child: Divider()), Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: CustomText("OR", color: AppColors.kGreyTextColor)), Expanded(child: Divider())]),
+              const Row(
+                children: [
+                  Expanded(child: Divider()),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: CustomText("OR", color: AppColors.kBrownTextColor),
+                  ),
+                  Expanded(child: Divider()),
+                ],
+              ),
               space16H,
-              CustomButton(text: "Continue with Google", isOutlined: true, borderColor: AppColors.kBorderColor.withValues(alpha: 0.3), textColor: Colors.black, onPressed: () {}),
+              CustomButton(
+                text: "Continue with Google",
+                isOutlined: true,
+                borderColor: AppColors.kBorderColor.withValues(alpha: 0.3),
+                textColor: Colors.black,
+                onPressed: () {},
+              ),
               space8H,
-              CustomButton(text: "Continue with Apple", isOutlined: true, borderColor: AppColors.kBorderColor.withValues(alpha: 0.3), textColor: Colors.black, onPressed: () {}),
+              CustomButton(
+                text: "Continue with Apple",
+                isOutlined: true,
+                borderColor: AppColors.kBorderColor.withValues(alpha: 0.3),
+                textColor: Colors.black,
+                onPressed: () {},
+              ),
             ],
           ),
         ),

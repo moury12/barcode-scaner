@@ -9,28 +9,32 @@ class NotificationPage extends StatelessWidget {
     final List<Map<String, dynamic>> notifications = [
       {
         'title': 'Raffle Winner! 🏆',
-        'message': 'Congratulations! You won the Sneaker Head draw. Check your active orders to claim it.',
+        'message':
+            'Congratulations! You won the Sneaker Head draw. Check your active orders to claim it.',
         'time': '2 mins ago',
         'type': 'raffle',
         'isRead': false,
       },
       {
         'title': 'Seller Live Now 🔴',
-        'message': 'RetroKicks is live streaming: "Rare Jordan 1s Drop & Auction!" Join now.',
+        'message':
+            'RetroKicks is live streaming: "Rare Jordan 1s Drop & Auction!" Join now.',
         'time': '1 hour ago',
         'type': 'live',
         'isRead': false,
       },
       {
         'title': 'Order Dispatched 📦',
-        'message': 'Your order #PK-88492 has been dispatched via Royal Mail. Track delivery status.',
+        'message':
+            'Your order #PK-88492 has been dispatched via Royal Mail. Track delivery status.',
         'time': 'Yesterday',
         'type': 'order',
         'isRead': true,
       },
       {
         'title': 'Promo Code Added 🎟️',
-        'message': 'Use code POKELIVE10 for 10% off on your next purchase. Valid for 48 hours.',
+        'message':
+            'Use code POKELIVE10 for 10% off on your next purchase. Valid for 48 hours.',
         'time': '3 days ago',
         'type': 'promo',
         'isRead': true,
@@ -71,7 +75,7 @@ class NotificationPage extends StatelessWidget {
                   Icon(
                     Icons.notifications_off_outlined,
                     size: 64,
-                    color: AppColors.kGreyTextColor.withOpacity(0.5),
+                    color: AppColors.kBrownTextColor.withOpacity(0.5),
                   ),
                   space16H,
                   const CustomText(
@@ -82,7 +86,7 @@ class NotificationPage extends StatelessWidget {
                   const CustomText(
                     'We will notify you when something important happens.',
                     variant: TextVariant.bodyMedium,
-                    color: AppColors.kGreyTextColor,
+                    color: AppColors.kBrownTextColor,
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -104,10 +108,7 @@ class NotificationPage extends StatelessWidget {
 class NotificationCard extends StatelessWidget {
   final Map<String, dynamic> notification;
 
-  const NotificationCard({
-    super.key,
-    required this.notification,
-  });
+  const NotificationCard({super.key, required this.notification});
 
   IconData _getIconForType(String type) {
     switch (type) {
@@ -146,10 +147,14 @@ class NotificationCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isRead ? Colors.transparent : AppColors.kPrimaryColor.withOpacity(0.15),
+        color: isRead
+            ? Colors.transparent
+            : AppColors.kPrimaryColor.withOpacity(0.15),
         borderRadius: BorderRadius.circular(appRadius),
         border: Border.all(
-          color: isRead ? AppColors.kBorderColor.withOpacity(0.3) : AppColors.kPrimaryColor.withOpacity(0.5),
+          color: isRead
+              ? AppColors.kBorderColor.withOpacity(0.3)
+              : AppColors.kPrimaryColor.withOpacity(0.5),
           width: 1,
         ),
       ),
@@ -183,13 +188,15 @@ class NotificationCard extends StatelessWidget {
                       child: CustomText(
                         notification['title'] as String,
                         variant: TextVariant.titleMedium,
-                        fontWeight: isRead ? FontWeight.normal : FontWeight.bold,
+                        fontWeight: isRead
+                            ? FontWeight.normal
+                            : FontWeight.bold,
                       ),
                     ),
                     CustomText(
                       notification['time'] as String,
                       variant: TextVariant.bodySmall,
-                      color: AppColors.kGreyTextColor,
+                      color: AppColors.kBrownTextColor,
                     ),
                   ],
                 ),
@@ -197,7 +204,9 @@ class NotificationCard extends StatelessWidget {
                 CustomText(
                   notification['message'] as String,
                   variant: TextVariant.bodyMedium,
-                  color: isRead ? AppColors.kGreyTextColor : AppColors.kTextColor,
+                  color: isRead
+                      ? AppColors.kBrownTextColor
+                      : AppColors.kTextColor,
                 ),
               ],
             ),

@@ -18,13 +18,16 @@ class OnboardingSlide extends StatelessWidget {
       children: [
         // Full screen image
         Positioned.fill(
-          child: Image.asset(imagePath, fit: BoxFit.cover),
+          child: Align(
+            alignment: AlignmentGeometry.topCenter,
+            child: Image.asset(imagePath, fit: BoxFit.contain),
+          ),
         ),
         // Bottom White Card
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.45,
+            height: MediaQuery.of(context).size.height * 0.5,
             width: double.infinity,
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -38,17 +41,17 @@ class OnboardingSlide extends StatelessWidget {
               children: [
                 CustomText(
                   title,
-                  variant: TextVariant.headlineLarge,
+                  variant: TextVariant.displayLarge,
                   textAlign: TextAlign.center,
                   color: AppColors.kPrimaryColor,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
-                const SizedBox(height: 16),
+                space12H,
                 CustomText(
                   description,
                   variant: TextVariant.bodyMedium,
                   textAlign: TextAlign.center,
-                  color: AppColors.kGreyTextColor,
+                  color: AppColors.kBrownTextColor,
                 ),
               ],
             ),

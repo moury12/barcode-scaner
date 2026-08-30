@@ -13,7 +13,7 @@ class AppStaticStrings {
   
   // Icon assets paths
   static const String cupIcon = 'assets/icons/cup_icon.svg';
-  static const String appLogo = 'assets/icons/app_logo.svg';
+  static const String appLogo = 'assets/icons/app_logo.png';
 
   // Onboarding Slides
   static const String onboardingTitle1 = 'Enjoy your daily drink';

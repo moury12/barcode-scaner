@@ -38,12 +38,12 @@ class EmptyStateWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 64, color: AppColors.kGreyTextColor),
+            Icon(icon, size: 64, color: AppColors.kBrownTextColor),
             const SizedBox(height: 16),
             CustomText(
               message,
               variant: TextVariant.bodyMedium,
-              color: AppColors.kGreyTextColor,
+              color: AppColors.kBrownTextColor,
               textAlign: TextAlign.center,
             ),
             if (onRetry != null) ...[

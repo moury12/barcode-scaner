@@ -28,7 +28,7 @@ class ResetPasswordPage extends StatelessWidget {
             const CustomText(
               "Your new password must be unique and different from previously used passwords. It must contain at least 8 characters, including letters and numbers.",
               variant: TextVariant.bodyMedium,
-              color: AppColors.kGreyTextColor,
+              color: AppColors.kBrownTextColor,
             ),
             space16H,
             const CustomTextField(

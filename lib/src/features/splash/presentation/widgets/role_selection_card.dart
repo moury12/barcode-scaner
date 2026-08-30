@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../../../../src_export.dart';
 
 class RoleSelectionCard extends StatelessWidget {
@@ -36,7 +35,7 @@ class RoleSelectionCard extends StatelessWidget {
             width: isSelected ? 2 : 1,
           ),
         ),
-        child: Row(
+        child: Column(
           children: [
             Container(
               padding: const EdgeInsets.all(12),
@@ -46,26 +45,26 @@ class RoleSelectionCard extends StatelessWidget {
               ),
               child: Icon(icon, color: AppColors.kPrimaryColor, size: 28),
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(
-                    title,
-                    variant: TextVariant.titleLarge,
-                    color: AppColors.kPrimaryColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  const SizedBox(height: 4),
-                  CustomText(
-                    description,
-                    variant: TextVariant.bodySmall,
-                    color: AppColors.kGreyTextColor,
-                    maxLines: 2,
-                  ),
-                ],
-              ),
+            space12H,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CustomText(
+                  title,
+                  variant: TextVariant.titleLarge,
+                  color: AppColors.kPrimaryColor,
+                  textAlign: TextAlign.center,
+                  fontWeight: FontWeight.bold,
+                ),
+                const SizedBox(height: 4),
+                CustomText(
+                  description,
+                  variant: TextVariant.bodySmall,
+                  color: AppColors.kBrownTextColor,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                ),
+              ],
             ),
           ],
         ),
