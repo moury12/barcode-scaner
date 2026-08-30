@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import '../../../../src_export.dart';
 
-/*
 class ResetPasswordPage extends StatelessWidget {
   const ResetPasswordPage({super.key});
 
@@ -8,44 +8,47 @@ class ResetPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(
-          color: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => context.pop(),
         ),
       ),
       body: SingleChildScrollView(
-        padding: AppPadding.getPadding12(
-          context,
-        ).copyWith(top: MediaQuery.of(context).viewPadding.top),
-
+        padding: AppPadding.getPadding12(context),
         child: Column(
-          spacing: 12,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // const SizedBox(height: 20),
-            SvgPicture.asset(AppAssets.appLogo, height: 80),
-            space24H,
+            space16H,
             const CustomText(
-              AppStaticStrings.createNewPassword,
+              "Set New Password",
               variant: TextVariant.headlineLarge,
+              fontWeight: FontWeight.bold,
             ),
+            space8H,
             const CustomText(
-              AppStaticStrings.resetPassSub,
-              textAlign: TextAlign.center,
+              "Your new password must be unique and different from previously used passwords. It must contain at least 8 characters, including letters and numbers.",
+              variant: TextVariant.bodyMedium,
               color: AppColors.kGreyTextColor,
             ),
-            space2H,
-            // const SizedBox(height: 40),
+            space16H,
             const CustomTextField(
-              title: AppStaticStrings.createNewPassword,
-              hintText: 'Create Password',
+              hintText: "New Password",
               isPassword: true,
+              prefixIcon: Icon(Icons.lock_outline, size: 20),
             ),
-            space2H,
-            // const SizedBox(height: 40),
+            space12H,
+            const CustomTextField(
+              hintText: "Confirm Password",
+              isPassword: true,
+              prefixIcon: Icon(Icons.lock_reset, size: 20),
+            ),
+            space16H,
             CustomButton(
-              text: AppStaticStrings.saveChanges,
-              onPressed: () => context.go(AppRoutes.login),
-              icon: Icons.arrow_forward,
+              text: "Reset Password",
+              onPressed: () {
+                // Navigate back to Login route
+                context.go(AppRoutes.login);
+              },
             ),
           ],
         ),
@@ -53,5 +56,3 @@ class ResetPasswordPage extends StatelessWidget {
     );
   }
 }
-*/
-

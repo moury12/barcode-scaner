@@ -1,57 +1,42 @@
+import 'package:flutter/material.dart';
 import '../../../../src_export.dart';
 
-/*
 class ForgotPasswordPage extends StatelessWidget {
   const ForgotPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          color: Colors.white,
-          onPressed: () => context.pop(),
-        ),
-      ),
+      appBar: AppBar(title: const CustomText("Heritage & Hearth", variant: TextVariant.titleLarge)),
       body: Padding(
-        padding: AppPadding.getPadding12(
-          context,
-        ).copyWith(top: MediaQuery.of(context).viewPadding.top + 24),
-        child: Column(
-          spacing: 12,
-          children: [
-            // const SizedBox(height: 20),
-            SvgPicture.asset(AppAssets.appLogo, height: 80),
-            // space24H,
-            const CustomText(
-              AppStaticStrings.forgotPassTitle,
-              variant: TextVariant.headlineLarge,
+        padding: AppPadding.getPadding12(context),
+        child: Center(
+          child: Container(
+            padding: AppPadding.getPadding16(context),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)],
             ),
-            const CustomText(
-              AppStaticStrings.forgotPassSub,
-              textAlign: TextAlign.center,
-              color: AppColors.kGreyTextColor,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleAvatar(backgroundColor: Colors.grey.shade100, radius: 24, child: const Icon(Icons.lock_outlined, color: Colors.black)),
+                space12H,
+                const CustomText("Forgot Password?", variant: TextVariant.headlineSmall, fontWeight: FontWeight.bold),
+                space8H,
+                const CustomText("Enter your registered email address and we'll help you reset your password.", textAlign: TextAlign.center, color: AppColors.kGreyTextColor),
+                space16H,
+                const CustomTextField(hintText: "Email Address", prefixIcon: Icon(Icons.mail_outline)),
+                space16H,
+                CustomButton(text: AppStaticStrings.continueText, onPressed: () => context.push(AppRoutes.resetPassword)),
+                space12H,
+                TextButton(onPressed: () => context.pop(), child: const CustomText("Back to Login", color: AppColors.kYellowColor)),
+              ],
             ),
-            // const SizedBox(height: 40),
-            CustomTextField(
-              title: AppStaticStrings.email,
-              hintText: 'Email',
-              suffixIcon: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: SvgPicture.asset(AppAssets.mailIcon),
-              ),
-            ),
-            // const SizedBox(height: 40),
-            CustomButton(
-              text: AppStaticStrings.sendOtp,
-              onPressed: () => context.push(AppRoutes.otpVerification),
-              icon: Icons.arrow_forward,
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
-*/
-

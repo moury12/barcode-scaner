@@ -43,8 +43,25 @@ class AppStaticStrings {
   static const String roleShopOwnerTitle = 'Shop Owner';
   static const String roleShopOwnerDesc = 'Manage customers and daily drink redemptions.';
 
+  // Login & Registration UI
+  static const String welcomeBack = 'Welcome back';
+  static const String loginSubtitle = 'Login to continue using the app';
+  static const String emailOrPhone = 'Email or Phone Number';
+  static const String changeRole = 'Change Role';
+  static const String createAccountTitle = 'Create Account';
+  static const String shopRegisterSubtitle = 'Register your shop on Heritage & Hearth';
+  static const String customerRegisterSubtitle = 'Sign up to access daily drink benefits';
+  static const String fullName = 'Full Name';
+  static const String ownerName = 'Owner Name';
+  static const String shopName = 'Shop Name';
+  static const String businessEmail = 'Business Email';
+  static const String phoneNumber = 'Phone Number';
+  static const String confirmPassword = 'Confirm Password';
+
   // Login
   static const String logIn = 'Log In';
+  static const String password = 'Password';
+  static const String createAccount = 'Create Account';
   static const String forgotPassword = 'Forgot Password?';
   static const String dontHaveAccount = "Don't have an account ? ";
   static const String signUp = 'Sign Up';
