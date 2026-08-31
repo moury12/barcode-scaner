@@ -102,7 +102,13 @@ class RegisterPage extends ConsumerWidget {
             space16H,
             CustomButton(
               text: AppStaticStrings.createAccount,
-              onPressed: () {},
+              onPressed: () {
+                if (isShop) {
+                  context.push(AppRoutes.activateShop);
+                } else {
+                  context.go(AppRoutes.findShop);
+                }
+              },
             ),
             space12H,
             Center(

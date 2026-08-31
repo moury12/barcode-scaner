@@ -7,6 +7,8 @@ export 'core/core_export.dart';
 // Features – presentation exports
 export 'features/auth/presentation/auth_presentation_export.dart';
 export 'features/splash/presentation/splash_presentation_export.dart';
+export 'features/shop_setup/presentation/shop_setup_presentation_export.dart';
+export 'features/customer_setup/presentation/customer_setup_presentation_export.dart';
 // export 'core/features/home/home_export.dart';
 // export 'core/features/navigation/navigation_export.dart';
 // export 'core/features/raffle/raffle_export.dart';

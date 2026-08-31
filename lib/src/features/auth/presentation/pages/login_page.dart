@@ -52,7 +52,13 @@ class LoginPage extends ConsumerWidget {
                 ),
               ),
               space12H,
-              CustomButton(text: AppStaticStrings.logIn, onPressed: () {}),
+              CustomButton(text: AppStaticStrings.logIn, onPressed: () {
+                if (role == 'customer') {
+                  context.go(AppRoutes.findShop);
+                } else {
+                  context.go(AppRoutes.activateShop);
+                }
+              }),
               space12H,
               Center(
                 child: GestureDetector(

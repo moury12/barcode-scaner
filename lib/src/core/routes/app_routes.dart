@@ -10,6 +10,18 @@ class AppRoutes {
   static const String resetPassword = '/reset-password';
   static const String setupProfile = '/setup-profile';
   static const String setupRide = '/setup-ride';
+
+  static const String activateShop = '/activate-shop';
+  static const String choosePlan = '/choose-plan';
+  static const String subscriptionPayment = '/subscription-payment';
+  static const String subscriptionSuccess = '/subscription-success';
+  static const String shopDetailsSetup = '/shop-details-setup';
+
+  static const String findShop = '/find-shop';
+  static const String shopDetails = '/shop-details';
+  static const String scanShopQr = '/scan-shop-qr';
+  static const String shopActivationPending = '/shop-activation-pending';
+  static const String shopActivationSuccess = '/shop-activation-success';
   
   static const String home    = '/home';
   static const String notification = '/notification';

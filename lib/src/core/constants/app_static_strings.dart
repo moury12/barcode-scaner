@@ -75,4 +75,19 @@ class AppStaticStrings {
   static const String forgotPassword = 'Forgot Password?';
   static const String dontHaveAccount = "Don't have an account ? ";
   static const String signUp = 'Sign Up';
+
+  // Shop Setup
+  static const String activateShopTitle = 'Activate your shop';
+  static const String choosePlanTitle = 'Choose your plan';
+  static const String completeSubscription = 'Complete Subscription';
+  static const String subscriptionActive = 'Subscription Active';
+  static const String setupYourShop = 'Set up your shop';
+
+  // Customer Setup
+  static const String findYourShop = 'Find your shop';
+  static const String findYourShopDesc = 'Select the participating shop where you enjoy your daily drink.';
+  static const String scanShopQr = 'Scan Shop QR';
+  static const String joinThisShop = 'Join This Shop';
+  static const String refreshStatus = 'Refresh Status';
+  static const String activationSuccess = 'You\'re ready!';
 }

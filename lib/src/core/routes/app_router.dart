@@ -26,7 +26,46 @@ class AppRouter {
         path: AppRoutes.resetPassword,
         builder: (context, state) => const ResetPasswordPage(),
       ),
- 
+      GoRoute(
+        path: AppRoutes.activateShop,
+        builder: (context, state) => const ActivateShopPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.choosePlan,
+        builder: (context, state) => const ChoosePlanPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.subscriptionPayment,
+        builder: (context, state) => const SubscriptionPaymentPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.subscriptionSuccess,
+        builder: (context, state) => const SubscriptionSuccessPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.shopDetailsSetup,
+        builder: (context, state) => const ShopDetailsSetupPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.findShop,
+        builder: (context, state) => const FindShopPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.shopDetails,
+        builder: (context, state) => const ShopDetailsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.scanShopQr,
+        builder: (context, state) => const ScanShopQrPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.shopActivationPending,
+        builder: (context, state) => const ShopActivationPendingPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.shopActivationSuccess,
+        builder: (context, state) => const ShopActivationSuccessPage(),
+      ),
     ],
   );
 }
