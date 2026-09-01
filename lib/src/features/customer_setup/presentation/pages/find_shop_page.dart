@@ -6,7 +6,6 @@ class FindShopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.kBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: AppPadding.getPadding12(context),

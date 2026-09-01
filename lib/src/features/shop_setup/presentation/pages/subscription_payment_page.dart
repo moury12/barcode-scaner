@@ -35,7 +35,6 @@ class SubscriptionPaymentPage extends ConsumerWidget {
     final total = price + tax;
 
     return Scaffold(
-      backgroundColor: AppColors.kBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

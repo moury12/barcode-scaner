@@ -6,86 +6,85 @@ class ActivateShopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.kBackgroundColor,
-      body: SafeArea(
-        top: false,
+      appBar: AppBar(
+        title: const CustomText(
+          AppStaticStrings.appName,
+          variant: TextVariant.titleLarge,
+          fontWeight: FontWeight.w500,
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            Expanded(
-              flex: 4,
+            // 1. Hero Image with Rounded Bottom
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(40),
+                bottomRight: Radius.circular(40),
+              ),
               child: Image.asset(
-                AppStaticStrings.onboardingImg1,
-                fit: BoxFit.cover,
+                'assets/images/active_ur_shope_img.png',
                 width: double.infinity,
+                height: 280,
+                fit: BoxFit.cover,
               ),
             ),
+
             Padding(
-              padding: AppPadding.getPadding12(context),
+              padding: AppPadding.getPadding24(context),
               child: Column(
                 children: [
-                  space16H,
+                  // 2. Title and Description
                   const CustomText(
                     AppStaticStrings.activateShopTitle,
-                    variant: TextVariant.headlineLarge,
+                    variant: TextVariant.displaySmall,
                     fontWeight: FontWeight.bold,
                   ),
-                  space8H,
-                  const CustomText(
-                    "Choose a subscription plan to start managing customers and redemptions.",
-                    textAlign: TextAlign.center,
-                    color: AppColors.kBrownTextColor,
-                  ),
-                  space16H,
-                  _featureItem(Icons.group_outlined, "Customer Management"),
                   space12H,
-                  _featureItem(Icons.qr_code_scanner, "Daily Code Scanning"),
-                  space12H,
-                  _featureItem(Icons.bar_chart, "Redemption Tracking"),
-                  space24H,
-                  CustomButton(
-                    text: "CHOOSE A PLAN →",
-                    backgroundColor: AppColors.kSetupButtonColor,
-                    onPressed: () => context.push(AppRoutes.choosePlan),
-                  ),
-                  space12H,
-                  ButtonTapWidget(
-                    onTap: () {},
-                    child: const CustomText(
-                      "Contact Support",
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: CustomText(
+                      "Choose a subscription plan to start managing customers and daily drink redemptions.",
+                      textAlign: TextAlign.center,
                       color: AppColors.kBrownTextColor,
                       variant: TextVariant.bodyMedium,
+                      height: 1.5,
                     ),
                   ),
+                  space24H,
+
+                  // 3. Feature Card List (Custom Widget)
+                  const ShopFeatureList(),
+                  space24H,
+
+                  // 4. Primary Button
+                  CustomButton(
+                    text: "CHOOSE A PLAN →",
+                    backgroundColor: const Color(0xFF536148), // Moss Green from UI
+                    onPressed: () => context.push(AppRoutes.choosePlan),
+                  ),
+                  space16H,
+
+                  // 5. Contact Support Link
+                  ButtonTapWidget(
+                    onTap: () {},
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CustomText(
+                        "Contact Support",
+                        color: Color(0xFF536148),
+                        fontWeight: FontWeight.w600,
+                        variant: TextVariant.bodyMedium,
+                      ),
+                    ),
+                  ),
+                  space16H,
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _featureItem(IconData icon, String text) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: AppColors.kPrimaryColor, size: 20),
-          ),
-          space12W,
-          CustomText(text, variant: TextVariant.bodyMedium, fontWeight: FontWeight.w600),
-        ],
       ),
     );
   }

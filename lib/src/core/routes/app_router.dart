@@ -4,9 +4,10 @@ class AppRouter {
   AppRouter._();
 
   static final GoRouter router = GoRouter(
+    debugLogDiagnostics: true,
     initialLocation: AppRoutes.splash, // Usually splash is the initial route
     routes: [
-           GoRoute(
+      GoRoute(
         path: AppRoutes.splash,
         builder: (context, state) => const SplashPage(),
       ),

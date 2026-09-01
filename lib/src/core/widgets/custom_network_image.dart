@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
-import '';
 import 'package:flutter/cupertino.dart';
 
 import '../core_export.dart';
@@ -148,7 +146,7 @@ class CustomNetworkImage extends StatelessWidget {
               image: DecorationImage(
                 image: AssetImage(
 
-                  imageErrorUrl ?? 'assets/icons/placeholder.png',
+                  imageErrorUrl ?? 'assets/icons/placeholder.jpg',
                 
                 ),
                 fit: BoxFit.cover,

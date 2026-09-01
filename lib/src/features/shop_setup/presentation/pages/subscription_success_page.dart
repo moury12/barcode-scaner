@@ -21,7 +21,6 @@ class SubscriptionSuccessPage extends ConsumerWidget {
     final planTitle = _getPlanTitle(selectedPlan);
 
     return Scaffold(
-      backgroundColor: AppColors.kBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: AppPadding.getPadding12(context),

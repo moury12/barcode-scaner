@@ -9,7 +9,6 @@ class ChoosePlanPage extends ConsumerWidget {
     final selectedPlan = ref.watch(planProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.kBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

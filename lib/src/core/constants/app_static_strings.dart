@@ -88,6 +88,10 @@ class AppStaticStrings {
   static const String findYourShopDesc = 'Select the participating shop where you enjoy your daily drink.';
   static const String scanShopQr = 'Scan Shop QR';
   static const String joinThisShop = 'Join This Shop';
+  static const String shopActivationTitle = 'Shop Activation';
+  static const String shopDetailsTitle = 'Shop Details';
+  static const String shopActivationPendingNotification = "You'll be notified when your account is activated.";
   static const String refreshStatus = 'Refresh Status';
   static const String activationSuccess = 'You\'re ready!';
+  static const String activationSuccessTitle = "Activation Success";
 }

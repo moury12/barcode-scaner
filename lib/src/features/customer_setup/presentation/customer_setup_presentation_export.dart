@@ -4,3 +4,4 @@ export 'pages/shop_details_page.dart';
 export 'pages/scan_shop_qr_page.dart';
 export 'pages/shop_activation_pending_page.dart';
 export 'pages/shop_activation_success_page.dart';
+export 'widgets/widgets_export.dart';
