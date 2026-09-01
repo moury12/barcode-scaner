@@ -28,6 +28,10 @@ class AppRouter {
         builder: (context, state) => const ResetPasswordPage(),
       ),
       GoRoute(
+        path: AppRoutes.mainLayout,
+        builder: (context, state) => const MainLayout(),
+      ),
+      GoRoute(
         path: AppRoutes.activateShop,
         builder: (context, state) => const ActivateShopPage(),
       ),
@@ -66,6 +70,14 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.shopActivationSuccess,
         builder: (context, state) => const ShopActivationSuccessPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.redemptionSuccess,
+        builder: (context, state) => const RedemptionSuccessPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.helpSupport,
+        builder: (context, state) => const HelpSupportPage(),
       ),
     ],
   );

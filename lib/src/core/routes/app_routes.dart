@@ -23,8 +23,10 @@ class AppRoutes {
   static const String shopActivationPending = '/shop-activation-pending';
   static const String shopActivationSuccess = '/shop-activation-success';
   
+  static const String mainLayout = '/main-layout';
   static const String home    = '/home';
   static const String notification = '/notification';
   static const String profile = '/profile';
-  
+  static const String redemptionSuccess = '/redemption-success';
+  static const String helpSupport = '/help-support';
 }

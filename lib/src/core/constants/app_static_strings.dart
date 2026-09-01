@@ -94,4 +94,17 @@ class AppStaticStrings {
   static const String refreshStatus = 'Refresh Status';
   static const String activationSuccess = 'You\'re ready!';
   static const String activationSuccessTitle = "Activation Success";
+
+  // Navigation Icons
+  static const String homeNav = 'assets/icons/home_nav_icon.svg';
+  static const String scanNav = 'assets/icons/scan_nav_icon.svg';
+  static const String historyNav = 'assets/icons/history_nav_icon.svg';
+  static const String profileNav = 'assets/icons/profile_nav_icon.svg';
+
+  // Feature specific
+  static const String available = 'AVAILABLE';
+  static const String redeemed = 'REDEEMED';
+  static const String showMyCode = 'Show My Code';
+  static const String drinkRedeemed = 'Drink Redeemed';
+  static const String backToHome = 'Back to Home';
 }

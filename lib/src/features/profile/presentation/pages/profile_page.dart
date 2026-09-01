@@ -1,85 +1,171 @@
 import '../../../../src_export.dart';
 
-/*
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(AppStaticStrings.myProfile)),
+      appBar: AppBar(
+        title: const CustomText("Profile", variant: TextVariant.titleLarge),
+      ),
       body: SingleChildScrollView(
-        padding: AppPadding.getPadding12H(context),
+        padding: AppPadding.getPadding12(context),
         child: Column(
-          spacing: 12,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const ProfileInfoCard(),
-            // space16H,
-            const SellerPromoCard(),
-            // space24H,
+            space16H,
+            // Circular Avatar Profile Header
+            const CircleAvatar(
+              radius: 40,
+              backgroundColor: Color(0xFFF1F1F1),
+              child: Icon(
+                Icons.person_outline,
+                size: 40,
+                color: AppColors.kTextColor,
+              ),
+            ),
+            space12H,
             const CustomText(
-              AppStaticStrings.myPurchases,
-              variant: TextVariant.titleLarge,
+              "John Doe",
+              variant: TextVariant.headlineMedium,
+              fontWeight: FontWeight.bold,
             ),
-            // space8H,
-            ProfileMenuItem(
-              title: AppStaticStrings.activeOrders,
-              icon: AppAssets.shoppingBag,
-              badgeCount: 1,
-              onTap: () => context.push(AppRoutes.activeOrders),
-            ),
-            ProfileMenuItem(
-              title: AppStaticStrings.ordersReviews,
-              icon: AppAssets.history,
-              onTap: () => context.push(AppRoutes.orderHistory),
-            ),
-            // space16H,
             const CustomText(
-              AppStaticStrings.settings,
-              variant: TextVariant.titleLarge,
+              "john.doe@example.com",
+              color: AppColors.kBrownTextColor,
+              variant: TextVariant.bodyMedium,
             ),
-            // space8H,
-            ProfileMenuItem(
-              title: AppStaticStrings.address,
-              icon: AppAssets.location,
-              onTap: () => context.push(AppRoutes.selectAddress),
+            space24H,
+
+            // ACCOUNT Group
+            _buildGroupHeader("ACCOUNT"),
+            space8H,
+            _buildProfileCard([
+              _buildMenuItem(
+                icon: Icons.person_outline,
+                title: "Personal Details",
+                onTap: () {},
+              ),
+              const Divider(height: 1),
+              _buildMenuItem(
+                icon: Icons.notifications_none,
+                title: "Notifications",
+                onTap: () {},
+              ),
+            ]),
+            space16H,
+
+            // MEMBERSHIP Group
+            _buildGroupHeader("MEMBERSHIP"),
+            space8H,
+            _buildProfileCard([
+              _buildMenuItem(
+                icon: Icons.storefront_outlined,
+                title: "Change Home Shop",
+                onTap: () => context.push(AppRoutes.findShop),
+              ),
+              const Divider(height: 1),
+              _buildMenuItem(
+                icon: Icons.card_membership_outlined,
+                title: "Subscription Details",
+                onTap: () {},
+              ),
+            ]),
+            space16H,
+
+            // SUPPORT Group
+            _buildGroupHeader("SUPPORT"),
+            space8H,
+            _buildProfileCard([
+              _buildMenuItem(
+                icon: Icons.help_outline,
+                title: "Help & Support",
+                onTap: () => context.push(AppRoutes.helpSupport),
+              ),
+              const Divider(height: 1),
+              _buildMenuItem(
+                icon: Icons.description_outlined,
+                title: "Terms & Privacy Policy",
+                onTap: () {},
+              ),
+            ]),
+            space24H,
+
+            // Logout Button
+            ButtonTapWidget(
+              onTap: () => context.go(AppRoutes.login),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.red.shade100),
+                ),
+                child: const Center(
+                  child: CustomText(
+                    "Log Out",
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    variant: TextVariant.bodyMedium,
+                  ),
+                ),
+              ),
             ),
-            ProfileMenuItem(
-              title: AppStaticStrings.changePassword,
-              icon: AppAssets.lock,
-              onTap: () => context.push(AppRoutes.changePassword),
+            space24H,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGroupHeader(String title) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: CustomText(
+        title,
+        variant: TextVariant.labelSmall,
+        fontWeight: FontWeight.bold,
+        color: AppColors.kBrownTextColor,
+      ),
+    );
+  }
+
+  Widget _buildProfileCard(List<Widget> children) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade100),
+      ),
+      child: Column(children: children),
+    );
+  }
+
+  Widget _buildMenuItem({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ButtonTapWidget(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: AppColors.kTextColor),
+            space16W,
+            Expanded(
+              child: CustomText(
+                title,
+                variant: TextVariant.bodyMedium,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-            ProfileMenuItem(
-              title: AppStaticStrings.helpSupport,
-              icon: AppAssets.support24,
-              onTap: () => context.push(AppRoutes.support),
-            ),
-            // space16H,
-            const CustomText(
-              AppStaticStrings.legal,
-              variant: TextVariant.titleLarge,
-            ),
-            // space8H,
-            ProfileMenuItem(
-              title: AppStaticStrings.privacyPolicy,
-              icon: AppAssets.policyIcon,
-              onTap: () => context.push(AppRoutes.privacyPolicy),
-            ),
-            ProfileMenuItem(
-              title: AppStaticStrings.termsCondition,
-              icon: AppAssets.termsIcon,
-              onTap: () => context.push(AppRoutes.termsCondition),
-            ),
-            // space24H,
-            ProfileMenuItem(
-              title: AppStaticStrings.logOut,
-              icon: AppAssets.logout,
-              textColor: AppColors.kRedColor,
-              showChevron: false,
-              onTap: () {
-                context.go(AppRoutes.login);
-              },
+            const Icon(
+              Icons.chevron_right,
+              size: 20,
+              color: AppColors.kBrownTextColor,
             ),
           ],
         ),
@@ -87,5 +173,3 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
-*/
-

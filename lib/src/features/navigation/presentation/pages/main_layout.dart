@@ -1,50 +1,47 @@
-import '../../../../src_export.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../src_export.dart';
 
-/*
-class NavigationPage extends ConsumerWidget {
-  const NavigationPage({super.key});
+class MainLayout extends ConsumerWidget {
+  const MainLayout({super.key});
+
   static const List<Widget> _screens = [
-    // HomePage(),
-    // CategoryPage(),
-    // SellerHubPage(),
-    // CartPage(),
-    // ProfilePage(),
+    HomePage(),
+    QrCodePage(),
+    HistoryPage(),
+    ProfilePage(),
   ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(navigationProvider);
+
     return Scaffold(
       body: IndexedStack(index: selectedIndex, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: (index) => ref.read(navigationProvider.notifier).state = index,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColors.kBackgroundColor,
-        selectedItemColor: AppColors.kTextColor,
-        unselectedItemColor: AppColors.kTextColor,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
+        selectedItemColor: const Color(0xFF536148),
+        unselectedItemColor: AppColors.kBrownTextColor,
         items: [
-          _navItem(AppAssets.home, AppAssets.home2, 'Home'),
-          _navItem(AppAssets.searchStatus, AppAssets.searchStatus2, 'Category'),
-          _navItem(AppAssets.category, AppAssets.sellerHubFill, 'Seller Hub'),
-          _navItem(AppAssets.shoppingCart, AppAssets.shoppingCartFill, 'Cart'),
-          _navItem(AppAssets.profile, AppAssets.profileFill, 'Profile'),
+          _navItem(AppStaticStrings.homeNav, 'Home'),
+          _navItem(AppStaticStrings.scanNav, 'My Code'),
+          _navItem(AppStaticStrings.historyNav, 'History'),
+          _navItem(AppStaticStrings.profileNav, 'Profile'),
         ],
       ),
     );
   }
 
-  BottomNavigationBarItem _navItem(String asset, String asset2, String label) {
+  BottomNavigationBarItem _navItem(String asset, String label) {
     return BottomNavigationBarItem(
       icon: Padding(
         padding: const EdgeInsets.only(bottom: 4),
         child: SvgPicture.asset(
           asset,
-          height: 25,
+          height: 20,
           colorFilter: const ColorFilter.mode(
-            AppColors.kTextColor,
+            AppColors.kBrownTextColor,
             BlendMode.srcIn,
           ),
         ),
@@ -52,17 +49,15 @@ class NavigationPage extends ConsumerWidget {
       activeIcon: Padding(
         padding: const EdgeInsets.only(bottom: 4),
         child: SvgPicture.asset(
-          asset2,
-          height: 25,
-          // colorFilter: const ColorFilter.mode(
-          //   AppColors.kTextColor,
-          //   BlendMode.srcIn,
-          // ),
+          asset,
+          height: 20,
+          colorFilter: const ColorFilter.mode(
+            Color(0xFF536148),
+            BlendMode.srcIn,
+          ),
         ),
       ),
       label: label,
     );
   }
 }
-*/
-

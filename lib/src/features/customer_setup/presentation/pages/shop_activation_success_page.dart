@@ -141,7 +141,7 @@ class ShopActivationSuccessPage extends StatelessWidget {
                 CustomButton(
                   text: "Go to Home →",
                   backgroundColor: AppColors.kSetupButtonColor,
-                  onPressed: () => context.go(AppRoutes.home),
+                  onPressed: () => context.go(AppRoutes.mainLayout),
                 ),
               ],
             ),
