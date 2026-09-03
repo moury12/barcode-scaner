@@ -29,4 +29,13 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String redemptionSuccess = '/redemption-success';
   static const String helpSupport = '/help-support';
+
+  static const String shopDashboard = '/shop-dashboard';
+  static const String verifyRedemption = '/verify-redemption';
+  static const String manualCodeEntry = '/manual-code-entry';
+
+  static const String customerRequest = '/customer-request';
+  static const String confirmActivation = '/confirm-activation';
+  static const String customerDetails = '/customer-details';
+  static const String redemptionHistory = '/redemption-history';
 }

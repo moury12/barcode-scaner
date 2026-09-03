@@ -14,3 +14,8 @@ export 'features/home/presentation/home_presentation_export.dart';
 export 'features/redemption/presentation/redemption_presentation_export.dart';
 export 'features/history/presentation/history_presentation_export.dart';
 export 'features/profile/presentation/profile_presentation_export.dart';
+export 'features/dashboard/presentation/dashboard_presentation_export.dart';
+export 'features/scanner/presentation/scanner_presentation_export.dart';
+export 'features/customer_management/presentation/customer_management_presentation_export.dart';
+
+

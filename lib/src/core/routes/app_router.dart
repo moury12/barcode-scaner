@@ -73,11 +73,39 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.redemptionSuccess,
-        builder: (context, state) => const RedemptionSuccessPage(),
+        builder: (context, state) => const RedemptionStatusPage(isSuccess: true),
       ),
       GoRoute(
         path: AppRoutes.helpSupport,
         builder: (context, state) => const HelpSupportPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.shopDashboard,
+        builder: (context, state) => const ShopDashboardPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.verifyRedemption,
+        builder: (context, state) => const CustomerVerifiedPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.manualCodeEntry,
+        builder: (context, state) => const ManualCodeEntryPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.customerRequest,
+        builder: (context, state) => const CustomerRequestPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.confirmActivation,
+        builder: (context, state) => const ConfirmActivationPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.customerDetails,
+        builder: (context, state) => const CustomerDetailsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.redemptionHistory,
+        builder: (context, state) => const RedemptionHistoryPage(),
       ),
     ],
   );

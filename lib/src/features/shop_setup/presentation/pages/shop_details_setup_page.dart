@@ -60,7 +60,7 @@ class ShopDetailsSetupPage extends StatelessWidget {
             CustomButton(
               text: "Complete Setup →",
               backgroundColor: AppColors.kSetupButtonColor,
-              onPressed: () => context.go(AppRoutes.home),
+              onPressed: () => context.go(AppRoutes.mainLayout),
             ),
             space16H,
           ],
