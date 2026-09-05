@@ -21,22 +21,29 @@ class DrinkStatusCard extends StatelessWidget {
         border: isAvailable ? null : Border.all(color: Colors.grey.shade200),
       ),
       child: Column(
+        spacing: 6,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomText(
-            isAvailable ? AppStaticStrings.available : AppStaticStrings.redeemed,
+            "TODAY'S DRINK",
+            variant: TextVariant.titleMedium,
+            color: Colors.white,
+          ),
+          CustomText(
+            isAvailable
+                ? AppStaticStrings.available
+                : AppStaticStrings.redeemed,
             variant: TextVariant.headlineMedium,
             color: isAvailable ? Colors.white : AppColors.kTextColor,
             fontWeight: FontWeight.bold,
           ),
-          space8H,
           CustomText(
-            isAvailable
-                ? "Your daily drink is ready to redeem."
-                : "You've already enjoyed today's drink.",
+            "Your daily drink is ready to redeem. Show your code to the barista.",
             color: isAvailable ? Colors.white70 : AppColors.kBrownTextColor,
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.left,
+            variant: TextVariant.bodyMedium,
           ),
-          space16H,
+
           if (isAvailable)
             CustomButton(
               text: AppStaticStrings.showMyCode,

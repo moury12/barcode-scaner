@@ -8,11 +8,29 @@ class RecentActivityList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const CustomText(
-          "RECENT ACTIVITY",
-          variant: TextVariant.labelSmall,
-          fontWeight: FontWeight.bold,
-          color: AppColors.kBrownTextColor,
+        Row(
+          children: [
+            Expanded(
+              child: const CustomText(
+                "RECENT ACTIVITY",
+                variant: TextVariant.labelSmall,
+                fontWeight: FontWeight.bold,
+                color: AppColors.kBrownTextColor,
+              ),
+            ),
+            ButtonTapWidget(
+              onTap: () {},
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: CustomText(
+                  "View All",
+                  fontSize: 10,
+                  color: AppColors.kPrimaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         ),
         space8H,
         Container(
@@ -45,10 +63,7 @@ class _ActivityTile extends StatelessWidget {
   final String shopName;
   final String timestamp;
 
-  const _ActivityTile({
-    required this.shopName,
-    required this.timestamp,
-  });
+  const _ActivityTile({required this.shopName, required this.timestamp});
 
   @override
   Widget build(BuildContext context) {
