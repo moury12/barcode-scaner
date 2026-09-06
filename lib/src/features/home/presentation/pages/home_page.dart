@@ -10,16 +10,16 @@ class HomePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 8.0),
           child: CustomNetworkImage(imageUrl: "", boxShape: BoxShape.circle),
         ),
-        title: Text("User Name"),
+        title: const Text("User Name"),
         centerTitle: false,
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.notifications_outlined, color: Colors.black),
+            onPressed: () => context.push(AppRoutes.notification),
+            icon: const Icon(Icons.notifications_outlined, color: Colors.black),
           ),
         ],
       ),
@@ -29,15 +29,17 @@ class HomePage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomText(
+              const CustomText(
                 "Welcome to Heritage & Hearth",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               space4H,
               DrinkStatusCard(
                 isAvailable: !isRedeemed,
-                onShowCode: () =>
-                    ref.read(navigationProvider.notifier).state = 1,
+                onShowCode: () {
+                  ref.read(isDrinkRedeemedProvider.notifier).state = true;
+                  ref.read(navigationProvider.notifier).state = 1;
+                },
               ),
               space12H,
               const MembershipDetailsCard(),

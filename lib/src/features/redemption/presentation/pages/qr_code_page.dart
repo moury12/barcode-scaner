@@ -44,16 +44,21 @@ class QrCodePage extends StatelessWidget {
                   _validTodayBadge(),
                   space24H,
                   // QR Frame
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade200),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      Icons.qr_code_2,
-                      size: 180,
-                      color: AppColors.kTextColor,
+                  ButtonTapWidget(
+                    onTap: () {
+                      context.push(AppRoutes.redemptionSuccess);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade200),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Icon(
+                        Icons.qr_code_2,
+                        size: 180,
+                        color: AppColors.kTextColor,
+                      ),
                     ),
                   ),
                   space24H,

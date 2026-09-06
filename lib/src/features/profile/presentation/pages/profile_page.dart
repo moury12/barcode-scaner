@@ -44,13 +44,13 @@ class ProfilePage extends StatelessWidget {
               _buildMenuItem(
                 icon: Icons.person_outline,
                 title: "Personal Details",
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.personalInfo),
               ),
               const Divider(height: 1),
               _buildMenuItem(
                 icon: Icons.notifications_none,
                 title: "Notifications",
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.notification),
               ),
             ]),
             space16H,
@@ -59,12 +59,12 @@ class ProfilePage extends StatelessWidget {
             _buildGroupHeader("MEMBERSHIP"),
             space8H,
             _buildProfileCard([
-              _buildMenuItem(
-                icon: Icons.storefront_outlined,
-                title: "Change Home Shop",
-                onTap: () => context.push(AppRoutes.findShop),
-              ),
-              const Divider(height: 1),
+              // _buildMenuItem(
+              //   icon: Icons.storefront_outlined,
+              //   title: "Change Home Shop",
+              //   onTap: () => context.push(AppRoutes.findShop),
+              // ),
+              // const Divider(height: 1),
               _buildMenuItem(
                 icon: Icons.card_membership_outlined,
                 title: "Subscription Details",

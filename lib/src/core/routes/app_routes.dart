@@ -28,6 +28,8 @@ class AppRoutes {
   static const String notification = '/notification';
   static const String profile = '/profile';
   static const String redemptionSuccess = '/redemption-success';
+  static const String alreadyRedeemed = '/already-redeemed';
+  static const String personalInfo = '/personal-info';
   static const String helpSupport = '/help-support';
 
   static const String shopDashboard = '/shop-dashboard';

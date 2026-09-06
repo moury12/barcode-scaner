@@ -73,7 +73,19 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.redemptionSuccess,
-        builder: (context, state) => const RedemptionStatusPage(isSuccess: true),
+        builder: (context, state) => const RedemptionSuccessPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.alreadyRedeemed,
+        builder: (context, state) => const AlreadyRedeemedPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.notification,
+        builder: (context, state) => const NotificationPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.personalInfo,
+        builder: (context, state) => const EditProfilePage(),
       ),
       GoRoute(
         path: AppRoutes.helpSupport,

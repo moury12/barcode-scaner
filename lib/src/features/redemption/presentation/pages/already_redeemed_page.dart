@@ -1,14 +1,14 @@
 import '../../../../src_export.dart';
 
-class RedemptionSuccessPage extends StatelessWidget {
-  const RedemptionSuccessPage({super.key});
+class AlreadyRedeemedPage extends StatelessWidget {
+  const AlreadyRedeemedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const CustomText(
-          "Success",
+          "My Daily Code",
           variant: TextVariant.titleLarge,
         ),
       ),
@@ -17,20 +17,23 @@ class RedemptionSuccessPage extends StatelessWidget {
         child: Column(
           children: [
             space24H,
-            const StatusIconHeader(isRedeemed: true),
+            const StatusIconHeader(isRedeemed: false),
             space24H,
             const CustomText(
-              "Drink Redeemed",
+              "Today's drink has been\nredeemed",
               variant: TextVariant.headlineLarge,
               fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
             ),
+            space12H,
             const CustomText(
-              "Enjoy your drink!",
+              "You've already used your daily drink\nbenefit.",
+              textAlign: TextAlign.center,
               color: AppColors.kBrownTextColor,
             ),
-            space32H,
-            const RedemptionInfoTable(),
             const Spacer(),
+            const NextCodeNoticeCard(),
+            space24H,
             CustomButton(
               text: "Back to Home",
               backgroundColor: const Color(0xFF536148),

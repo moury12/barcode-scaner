@@ -1,3 +1,5 @@
+// lib/src/features/navigation/presentation/pages/main_layout.dart
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
 
@@ -10,19 +12,40 @@ class MainLayout extends ConsumerWidget {
     final role = ref.watch(onboardingRoleProvider) ?? 'customer';
     final isShopOwner = role == 'shop_owner';
 
-    final List<Widget> screens = isShopOwner 
-      ? [const ShopDashboardPage(), const ScannerPage(), const CustomerListPage(), const ShopProfileTab()] // Shop owner screens
-      : [const HomePage(), const QrCodePage(), const HistoryPage(), const ProfilePage()]; // Customer screens
+    final List<Widget> screens = isShopOwner
+        ? [
+            const ShopDashboardPage(),
+            const ScannerPage(),
+            const CustomerListPage(),
+            const ShopProfileTab(),
+          ]
+        : [
+            const HomePage(),
+            const QrCodePage(),
+            const HistoryPage(),
+            const ProfilePage(),
+          ];
 
     return Scaffold(
       body: IndexedStack(index: selectedIndex, children: screens),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        onTap: (index) => ref.read(navigationProvider.notifier).state = index,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.kSetupButtonColor,
-        unselectedItemColor: AppColors.kBrownTextColor,
-        items: isShopOwner ? _shopOwnerItems() : _customerItems(),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(top: BorderSide(color: Colors.grey.shade100)),
+        ),
+        child: BottomNavigationBar(
+          currentIndex: selectedIndex,
+          onTap: (index) => ref.read(navigationProvider.notifier).state = index,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          // CRITICAL: Set font sizes to 0 to remove label space
+          selectedFontSize: 0,
+          unselectedFontSize: 0,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: isShopOwner ? _shopOwnerItems() : _customerItems(),
+        ),
       ),
     );
   }
@@ -43,9 +66,57 @@ class MainLayout extends ConsumerWidget {
 
   BottomNavigationBarItem _navItem(String asset, String label) {
     return BottomNavigationBarItem(
-      icon: SvgPicture.asset(asset, height: 20, colorFilter: const ColorFilter.mode(AppColors.kBrownTextColor, BlendMode.srcIn)),
-      activeIcon: SvgPicture.asset(asset, height: 20, colorFilter: const ColorFilter.mode(AppColors.kSetupButtonColor, BlendMode.srcIn)),
-      label: label,
+      // UNSELECTED STATE
+      icon: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(
+            asset,
+            height: 20,
+            colorFilter: const ColorFilter.mode(
+              AppColors.kPrimaryColor,
+              BlendMode.srcIn,
+            ),
+          ),
+          const SizedBox(height: 4),
+          CustomText(
+            label,
+            variant: TextVariant.labelSmall,
+            color: AppColors.kPrimaryColor,
+            fontSize: 10,
+          ),
+        ],
+      ),
+      // SELECTED STATE (The Pill)
+      activeIcon: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.kPrimaryColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              asset,
+              height: 20,
+              colorFilter: const ColorFilter.mode(
+                AppColors.kBackgroundColor,
+                BlendMode.srcIn,
+              ),
+            ),
+            const SizedBox(height: 4),
+            CustomText(
+              label,
+              variant: TextVariant.labelSmall,
+              color: AppColors.kBackgroundColor,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ],
+        ),
+      ),
+      label: '', // Empty because we are rendering text inside the icon widget
     );
   }
 }

@@ -10,7 +10,9 @@ const SizedBox space4H  = SizedBox(height: 4);
 const SizedBox space8H  = SizedBox(height: 8);
 const SizedBox space12H = SizedBox(height: 12);
 const SizedBox space16H = SizedBox(height: 16);
+const SizedBox space20H = SizedBox(height: 20);
 const SizedBox space24H = SizedBox(height: 24);
+const SizedBox space32H = SizedBox(height: 32);
 
 const SizedBox space4W  = SizedBox(width: 4);
 const SizedBox space8W  = SizedBox(width: 8);

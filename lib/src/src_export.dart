@@ -17,5 +17,6 @@ export 'features/profile/presentation/profile_presentation_export.dart';
 export 'features/dashboard/presentation/dashboard_presentation_export.dart';
 export 'features/scanner/presentation/scanner_presentation_export.dart';
 export 'features/customer_management/presentation/customer_management_presentation_export.dart';
+export 'features/notification/notification_export.dart';
 
 

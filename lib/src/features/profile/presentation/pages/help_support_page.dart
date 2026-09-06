@@ -17,20 +17,12 @@ class HelpSupportPage extends StatelessWidget {
         child: Column(
           children: [
             // Mock illustration container
-            Container(
-              height: 180,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(
-                Icons.support_agent,
-                size: 80,
-                color: Color(0xFF536148),
-              ),
+            Image.asset(
+              'assets/images/support.png',
+              fit: BoxFit.contain,
+              height: 200,
             ),
-            space16H,
+            space8H,
             const CustomTextField(
               title: "Title",
               hintText: "Enter the title of your issue",

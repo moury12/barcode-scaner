@@ -7,7 +7,7 @@ class ShopDashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const CustomText(AppStaticStrings.appName, variant: TextVariant.titleLarge),
+        title: const CustomText(AppStaticStrings.appName, variant: TextVariant.titleLarge,),
         actions: [
           IconButton(
             onPressed: () {},
