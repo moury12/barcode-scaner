@@ -2,9 +2,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'src/src_export.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: MyApp()));
+  final localStorage = await LocalStorageService.init();
+  runApp(
+    ProviderScope(
+      overrides: [
+        localStorageServiceProvider.overrideWithValue(localStorage),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

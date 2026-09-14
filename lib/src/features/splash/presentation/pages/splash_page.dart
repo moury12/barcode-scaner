@@ -16,12 +16,33 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     super.initState();
     _pageController = PageController();
 
-    // Step 0 -> Step 1 after delay
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted && ref.read(onboardingStepProvider) == 0) {
+    _initAppFlow();
+  }
+
+  Future<void> _initAppFlow() async {
+    await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) return;
+
+    final storage = ref.read(localStorageServiceProvider);
+    final isCompleted = storage.isOnboardingCompleted;
+
+    if (isCompleted) {
+      if (storage.accessToken != null && storage.accessToken!.isNotEmpty) {
+        context.go(AppRoutes.mainLayout);
+      } else {
+        context.go(AppRoutes.login);
+      }
+    } else {
+      if (ref.read(onboardingStepProvider) == 0) {
         ref.read(onboardingStepProvider.notifier).setStep(1);
       }
-    });
+    }
+  }
+
+  Future<void> _completeAndNavigate(String route) async {
+    await ref.read(onboardingStepProvider.notifier).markCompleted();
+    if (!mounted) return;
+    context.go(route);
   }
 
   @override
@@ -33,7 +54,6 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   Widget build(BuildContext context) {
     final step = ref.watch(onboardingStepProvider);
-    final selectedRole = ref.watch(onboardingRoleProvider);
 
     // 1. SPLASH SCREEN (Step 0)
     if (step == 0) {
@@ -45,13 +65,13 @@ class _SplashPageState extends ConsumerState<SplashPage> {
             children: [
               Image.asset(AppStaticStrings.appLogo, height: 150),
               space12H,
-              CustomText(
+              const CustomText(
                 AppStaticStrings.appName,
                 variant: TextVariant.displaySmall,
                 color: Colors.white,
               ),
               space8H,
-              CustomText(
+              const CustomText(
                 AppStaticStrings.appSubtitle,
                 variant: TextVariant.bodyMedium,
                 color: Colors.white70,
@@ -62,72 +82,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       );
     }
 
-    // 2. ROLE SELECTION (Step 5)
-    if (step == 5) {
-      return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-            onPressed: () =>
-                ref.read(onboardingStepProvider.notifier).setStep(4),
-          ),
-        ),
-        body: Padding(
-          padding: AppPadding.getPadding12(context),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CustomText(
-                AppStaticStrings.roleSelectionTitle,
-                variant: TextVariant.displayLarge,
-                color: AppColors.kPrimaryColor,
-                fontWeight: FontWeight.w600,
-                textAlign: TextAlign.center,
-              ),
-              // const SizedBox(height: 8),
-              space12H,
-              CustomText(
-                AppStaticStrings.roleSelectionDesc,
-                variant: TextVariant.bodyMedium,
-                color: AppColors.kBrownTextColor,
-                textAlign: TextAlign.center,
-              ),
-              space24H,
-              RoleSelectionCard(
-                title: AppStaticStrings.roleCustomerTitle,
-                description: AppStaticStrings.roleCustomerDesc,
-                icon: Icons.person_outline,
-                isSelected: selectedRole == 'customer',
-                onTap: () => ref
-                    .read(onboardingRoleProvider.notifier)
-                    .selectRole('customer'),
-              ),
-              space12H,
-              RoleSelectionCard(
-                title: AppStaticStrings.roleShopOwnerTitle,
-                description: AppStaticStrings.roleShopOwnerDesc,
-                icon: Icons.storefront_outlined,
-                isSelected: selectedRole == 'shop_owner',
-                onTap: () => ref
-                    .read(onboardingRoleProvider.notifier)
-                    .selectRole('shop_owner'),
-              ),
-              const Spacer(),
-              CustomButton(
-                text: AppStaticStrings.continueText,
-                onPressed: () => context.push(AppRoutes.login),
-                backgroundColor: selectedRole != null
-                    ? AppColors.kPrimaryColor
-                    : AppColors.kPrimaryColor.withValues(alpha: 0.5),
-              ),
-              space12H,
-            ],
-          ),
-        ),
-      );
-    }
-
-    // 3. WELCOME SCREEN (Step 4)
+    // 2. WELCOME SCREEN (Step 4)
     if (step == 4) {
       return Scaffold(
         appBar: AppBar(
@@ -147,14 +102,12 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                 BlendMode.srcIn,
               ),
             ),
-            // const SizedBox(height: 8),
             space12H,
-            CustomText(
+            const CustomText(
               AppStaticStrings.appName,
               variant: TextVariant.titleLarge,
               color: AppColors.kPrimaryColor,
             ),
-            // const SizedBox(height: 30),
             space12H,
             Expanded(
               child: Padding(
@@ -172,31 +125,27 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               padding: const EdgeInsets.all(32.0),
               child: Column(
                 children: [
-                  CustomText(
+                  const CustomText(
                     AppStaticStrings.onboardingTitle4,
                     variant: TextVariant.headlineLarge,
                     color: AppColors.kPrimaryColor,
                   ),
-                  // const SizedBox(height: 12),
                   space12H,
-                  CustomText(
+                  const CustomText(
                     AppStaticStrings.onboardingDesc4,
                     variant: TextVariant.bodyMedium,
                     color: AppColors.kBrownTextColor,
                     textAlign: TextAlign.center,
                   ),
-                  // const SizedBox(height: 40),
                   space12H,
                   CustomButton(
                     text: AppStaticStrings.getStarted,
-                    onPressed: () =>
-                        ref.read(onboardingStepProvider.notifier).setStep(5),
+                    onPressed: () => _completeAndNavigate(AppRoutes.register),
                   ),
-                  // const SizedBox(height: 16),
                   space12H,
                   CustomButton(
                     text: AppStaticStrings.alreadyHaveAccount,
-                    onPressed: () => context.push(AppRoutes.login),
+                    onPressed: () => _completeAndNavigate(AppRoutes.login),
                     isOutlined: true,
                     textColor: AppColors.kPrimaryColor,
                   ),
@@ -208,7 +157,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       );
     }
 
-    // 4. ONBOARDING SLIDES (Steps 1, 2, 3)
+    // 3. ONBOARDING SLIDES (Steps 1, 2, 3)
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -259,7 +208,6 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                     ),
                   ),
                 ),
-                // const SizedBox(height: 32),
                 space12H,
                 CustomButton(
                   text: AppStaticStrings.next,
@@ -274,12 +222,10 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                     }
                   },
                 ),
-                // const SizedBox(height: 12),
                 space12H,
                 CustomButton(
                   text: AppStaticStrings.skip,
-                  onPressed: () =>
-                      ref.read(onboardingStepProvider.notifier).setStep(4),
+                  onPressed: () => _completeAndNavigate(AppRoutes.login),
                   isOutlined: true,
                   textColor: AppColors.kPrimaryColor,
                 ),

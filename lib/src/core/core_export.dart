@@ -18,3 +18,4 @@ export 'widgets/custom_network_image.dart';
 
 export 'constants/constants_export.dart';
 export 'routes/route_export.dart';
+export 'services/services_export.dart';

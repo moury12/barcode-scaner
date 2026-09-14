@@ -1,13 +1,81 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
+import '../controllers/auth_controller.dart';
 
-class RegisterPage extends ConsumerWidget {
+class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final role = ref.watch(onboardingRoleProvider) ?? 'customer';
-    final isShop = role == 'shop_owner';
+  ConsumerState<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends ConsumerState<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleRegister() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      CustomSnackbar.show(
+        context,
+        'Passwords do not match',
+        isError: true,
+      );
+      return;
+    }
+
+    final success = await ref
+        .read(registerControllerProvider.notifier)
+        .registerCustomer(
+          fullName: _fullNameController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          phone: _phoneController.text.trim(),
+        );
+
+    if (!mounted) return;
+
+    final state = ref.read(registerControllerProvider);
+    if (success) {
+      CustomSnackbar.show(
+        context,
+        state.successMessage ?? 'Please check your email to verify',
+        isError: false,
+      );
+      context.push(
+        AppRoutes.otpVerification,
+        extra: {
+          'email': _emailController.text.trim(),
+          'isForgotPassword': false,
+        },
+      );
+    } else {
+      CustomSnackbar.show(
+        context,
+        state.errorMessage ?? 'Registration failed',
+        isError: true,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final registerState = ref.watch(registerControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -15,125 +83,154 @@ class RegisterPage extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => context.pop(),
         ),
-        actions: [
-          ButtonTapWidget(
-            onTap: () {
-              // 1. Update the state to Step 5 (Role Selection)
-              ref.read(onboardingStepProvider.notifier).setStep(5);
-
-              // 2. Navigate back to the Splash route where Step 5 is rendered
-              context.go(AppRoutes.splash);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: const CustomText(
-                AppStaticStrings.changeRole,
-                color: AppColors.kAccentColor,
-              ),
-            ),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: AppPadding.getPadding12H(context),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AuthRoleBadge(role: role),
-            space12H,
-            const CustomText(
-              AppStaticStrings.createAccountTitle,
-              variant: TextVariant.headlineLarge,
-              fontWeight: FontWeight.bold,
-            ),
-            space4H,
-            CustomText(
-              isShop
-                  ? AppStaticStrings.shopRegisterSubtitle
-                  : AppStaticStrings.customerRegisterSubtitle,
-              color: AppColors.kBrownTextColor,
-            ),
-            space16H,
-            if (!isShop) ...[
-              const CustomTextField(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              space12H,
+              const CustomText(
+                AppStaticStrings.createAccountTitle,
+                variant: TextVariant.headlineLarge,
+                fontWeight: FontWeight.bold,
+              ),
+              space4H,
+              const CustomText(
+                AppStaticStrings.customerRegisterSubtitle,
+                color: AppColors.kBrownTextColor,
+              ),
+              space16H,
+              CustomTextField(
+                textEditingController: _fullNameController,
                 hintText: AppStaticStrings.fullName,
                 title: AppStaticStrings.fullName,
-                prefixIcon: Icon(Icons.person_outline, size: 20),
-              ),
-            ] else ...[
-              const CustomTextField(
-                hintText: AppStaticStrings.ownerName,
-                title: AppStaticStrings.ownerName,
-                prefixIcon: Icon(Icons.person_outline, size: 20),
+                isRequired: true,
+                prefixIcon: const Icon(Icons.person_outline, size: 20),
+                validator: (val) {
+                  if (val == null || val.trim().isEmpty) {
+                    return 'Full name is required';
+                  }
+                  return null;
+                },
               ),
               space12H,
-              const CustomTextField(
-                hintText: AppStaticStrings.shopName,
-                title: AppStaticStrings.shopName,
-                prefixIcon: Icon(Icons.storefront_outlined, size: 20),
+              CustomTextField(
+                textEditingController: _emailController,
+                hintText: "Email",
+                title: "Email",
+                isRequired: true,
+                keyboardType: TextInputType.emailAddress,
+                prefixIcon: const Icon(Icons.email_outlined, size: 20),
+                validator: (val) {
+                  if (val == null || val.trim().isEmpty) {
+                    return 'Email is required';
+                  }
+                  if (!val.contains('@')) {
+                    return 'Please enter a valid email';
+                  }
+                  return null;
+                },
               ),
-            ],
-            space12H,
-            CustomTextField(
-              hintText: isShop ? AppStaticStrings.businessEmail : "Email",
-              title: isShop ? AppStaticStrings.businessEmail : "Email",
-              prefixIcon: const Icon(Icons.email_outlined, size: 20),
-            ),
-            space12H,
-            const CustomTextField(
-              hintText: AppStaticStrings.phoneNumber,
-              title: AppStaticStrings.phoneNumber,
-              prefixIcon: Icon(Icons.phone_outlined, size: 20),
-            ),
-            space12H,
-            const CustomTextField(
-              hintText: AppStaticStrings.password,
-              title: AppStaticStrings.password,
-              isPassword: true,
-              prefixIcon: Icon(Icons.lock_outline, size: 20),
-            ),
-            space12H,
-            const CustomTextField(
-              hintText: AppStaticStrings.confirmPassword,
-              title: AppStaticStrings.confirmPassword,
-              isPassword: true,
-              prefixIcon: Icon(Icons.lock_reset, size: 20),
-            ),
-            space16H,
-            CustomButton(
-              text: AppStaticStrings.createAccount,
-              onPressed: () {
-                if (isShop) {
-                  context.push(AppRoutes.activateShop);
-                } else {
-                  context.go(AppRoutes.findShop);
-                }
-              },
-            ),
-            space12H,
-            Center(
-              child: GestureDetector(
-                onTap: () => context.pop(),
-                child: RichText(
-                  text: TextSpan(
-                    text: "Already have an account? ",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.kBrownTextColor,
-                    ),
-                    children: const [
-                      TextSpan(
-                        text: AppStaticStrings.logIn,
-                        style: TextStyle(
-                          color: AppColors.kAccentColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+              space12H,
+              CustomTextField(
+                textEditingController: _phoneController,
+                hintText: AppStaticStrings.phoneNumber,
+                title: AppStaticStrings.phoneNumber,
+                isRequired: true,
+                keyboardType: TextInputType.phone,
+                prefixIcon: const Icon(Icons.phone_outlined, size: 20),
+                validator: (val) {
+                  if (val == null || val.trim().isEmpty) {
+                    return 'Phone number is required';
+                  }
+                  return null;
+                },
+              ),
+              space12H,
+              CustomTextField(
+                textEditingController: _passwordController,
+                hintText: AppStaticStrings.password,
+                title: AppStaticStrings.password,
+                isPassword: true,
+                isRequired: true,
+                prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                validator: (val) {
+                  if (val == null || val.isEmpty) {
+                    return 'Password is required';
+                  }
+                  if (val.length < 6) {
+                    return 'Password must be at least 6 characters';
+                  }
+                  return null;
+                },
+              ),
+              space12H,
+              CustomTextField(
+                textEditingController: _confirmPasswordController,
+                hintText: AppStaticStrings.confirmPassword,
+                title: AppStaticStrings.confirmPassword,
+                isPassword: true,
+                isRequired: true,
+                prefixIcon: const Icon(Icons.lock_reset, size: 20),
+                validator: (val) {
+                  if (val == null || val.isEmpty) {
+                    return 'Please confirm password';
+                  }
+                  return null;
+                },
+              ),
+              space16H,
+              CustomButton(
+                text: AppStaticStrings.createAccount,
+                isLoading: registerState.isLoading,
+                onPressed: () => _handleRegister(),
+              ),
+              space12H,
+              Center(
+                child: GestureDetector(
+                  onTap: () => context.pop(),
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Already have an account? ",
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.kBrownTextColor,
                       ),
-                    ],
+                      children: const [
+                        TextSpan(
+                          text: AppStaticStrings.logIn,
+                          style: TextStyle(
+                            color: AppColors.kAccentColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+              space12H,
+              Center(
+                child: GestureDetector(
+                  onTap: () => context.push(
+                    AppRoutes.otpVerification,
+                    extra: {
+                      'email': _emailController.text.trim(),
+                      'isForgotPassword': false,
+                    },
+                  ),
+                  child: const CustomText(
+                    "Need to verify your account? Verify Here",
+                    color: AppColors.kPrimaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              space24H,
+            ],
+          ),
         ),
       ),
     );

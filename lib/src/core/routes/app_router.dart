@@ -20,12 +20,28 @@ class AppRouter {
         builder: (context, state) => const RegisterPage(),
       ),
       GoRoute(
+        path: AppRoutes.otpVerification,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return OtpPage(
+            email: extra?['email'] as String?,
+            isForgotPassword: extra?['isForgotPassword'] as bool? ?? false,
+          );
+        },
+      ),
+      GoRoute(
         path: AppRoutes.forgotPassword,
         builder: (context, state) => const ForgotPasswordPage(),
       ),
       GoRoute(
         path: AppRoutes.resetPassword,
-        builder: (context, state) => const ResetPasswordPage(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return ResetPasswordPage(
+            email: extra?['email'] as String?,
+            token: extra?['token'] as String?,
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.mainLayout,
