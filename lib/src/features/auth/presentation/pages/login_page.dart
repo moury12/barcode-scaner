@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
 import '../controllers/auth_controller.dart';
+import '../../../shop_setup/data/datasources/shop_remote_datasource.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -11,8 +14,14 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  // final _emailController = TextEditingController(text: kDebugMode ? "bifigow685@hideam.com" : "");
+  // final _passwordController = TextEditingController(text: kDebugMode ? "123456A" : "");
+  final _emailController = TextEditingController(
+    text: kDebugMode ? "tanzibamouri00@gmail.com" : "",
+  );
+  final _passwordController = TextEditingController(
+    text: kDebugMode ? "Password123" : "",
+  );
 
   @override
   void dispose() {
@@ -21,10 +30,29 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     super.dispose();
   }
 
+  /// Decodes a JWT payload without verifying the signature.
+  Map<String, dynamic>? _decodeJwt(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length != 3) return null;
+      var payload = parts[1];
+      // Pad base64 if necessary
+      while (payload.length % 4 != 0) {
+        payload += '=';
+      }
+      final decoded = utf8.decode(base64Url.decode(payload));
+      return jsonDecode(decoded) as Map<String, dynamic>;
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final success = await ref.read(loginControllerProvider.notifier).loginUser(
+    final success = await ref
+        .read(loginControllerProvider.notifier)
+        .loginUser(
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
@@ -38,7 +66,34 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         loginState.successMessage ?? 'Login successful',
         isError: false,
       );
-      context.go(AppRoutes.mainLayout);
+
+      // ─── Role-based routing ───
+      final storage = ref.read(localStorageServiceProvider);
+      final accessToken = storage.accessToken;
+      String role = 'customer';
+
+      if (accessToken != null) {
+        final payload = _decodeJwt(accessToken);
+        role = payload?['role'] as String? ?? 'customer';
+        await storage.saveUserRole(role);
+      }
+
+      if (!mounted) return;
+
+      if (role == 'owner' || role == 'shop_owner') {
+        // Check if shop already exists
+        try {
+          final shopDs = ref.read(shopRemoteDataSourceProvider);
+          await shopDs.getMyShop();
+          // Shop exists → go to main layout
+          if (mounted) context.go(AppRoutes.mainLayout);
+        } catch (_) {
+          // No shop yet → go to shop setup
+          if (mounted) context.go(AppRoutes.shopDetailsSetup);
+        }
+      } else {
+        context.go(AppRoutes.mainLayout);
+      }
     } else {
       CustomSnackbar.show(
         context,
@@ -47,6 +102,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -151,8 +207,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       text: TextSpan(
                         text: AppStaticStrings.dontHaveAccount,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.kBrownTextColor,
-                            ),
+                          color: AppColors.kBrownTextColor,
+                        ),
                         children: const [
                           TextSpan(
                             text: AppStaticStrings.signUp,

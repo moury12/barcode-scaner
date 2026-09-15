@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/api_service.dart';
+import '../../../../core/services/local_storage_service.dart';
 import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -45,13 +47,19 @@ abstract class AuthRemoteDataSource {
     required String newPassword,
   });
 
+  Future<Map<String, dynamic>> deleteAccount({
+    required String password,
+  });
+
   Future<void> logout();
   Future<UserModel?> getCurrentUser();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final ApiService _api;
-  AuthRemoteDataSourceImpl(this._api);
+  final LocalStorageService _storage;
+
+  AuthRemoteDataSourceImpl(this._api, this._storage);
 
   @override
   Future<UserModel> login({
@@ -213,11 +221,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String newPassword,
   }) async {
     final response = await _api.post(
-      '/auth/forgot-password/reset-password',
+      '/auth/forgot-password/set-new-password',
       data: {
-        'email': email,
         'token': token,
-        'newPassword': newPassword,
+        'password': newPassword,
       },
     );
 
@@ -232,8 +239,48 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
+  Future<Map<String, dynamic>> deleteAccount({
+    required String password,
+  }) async {
+    final response = await _api.post(
+      '/auth/delete-account',
+      data: {
+        'password': password,
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      await _storage.clear();
+      if (response.data is Map<String, dynamic>) {
+        return response.data as Map<String, dynamic>;
+      }
+      return {'success': true, 'message': 'Account deleted successfully'};
+    } else {
+      final msg = (response.data is Map && response.data['message'] != null)
+          ? response.data['message']
+          : 'Failed to delete account';
+      throw Exception(msg);
+    }
+  }
+
+  @override
   Future<void> logout() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    final refreshToken = _storage.refreshToken ?? '';
+    final accessToken = _storage.accessToken ?? '';
+    try {
+      await _api.post(
+        '/auth/logout',
+        data: {
+          'refreshToken': refreshToken,
+        },
+        options: Options(
+          headers: {
+            if (accessToken.isNotEmpty) 'Authorization': 'Bearer $accessToken',
+          },
+        ),
+      );
+    } catch (_) {}
+    await _storage.clear();
   }
 
   @override
@@ -244,5 +291,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
   final apiService = ref.watch(apiServiceProvider);
-  return AuthRemoteDataSourceImpl(apiService);
+  final storage = ref.watch(localStorageServiceProvider);
+  return AuthRemoteDataSourceImpl(apiService, storage);
 });

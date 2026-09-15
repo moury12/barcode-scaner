@@ -5,6 +5,7 @@ class LocalStorageService {
   static const String _keyAccessToken = 'access_token';
   static const String _keyRefreshToken = 'refresh_token';
   static const String _keyOnboardingCompleted = 'onboarding_completed';
+  static const String _keyUserRole = 'user_role';
 
   final SharedPreferences _prefs;
 
@@ -26,6 +27,7 @@ class LocalStorageService {
   Future<bool> clear() async {
     await _prefs.remove(_keyAccessToken);
     await _prefs.remove(_keyRefreshToken);
+    await _prefs.remove(_keyUserRole);
     return true;
   }
 
@@ -33,6 +35,12 @@ class LocalStorageService {
 
   Future<bool> setOnboardingCompleted(bool value) async {
     return await _prefs.setBool(_keyOnboardingCompleted, value);
+  }
+
+  String? get userRole => _prefs.getString(_keyUserRole);
+
+  Future<bool> saveUserRole(String role) async {
+    return await _prefs.setString(_keyUserRole, role);
   }
 }
 

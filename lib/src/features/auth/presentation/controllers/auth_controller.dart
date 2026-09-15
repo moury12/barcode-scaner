@@ -269,6 +269,57 @@ final forgotPasswordControllerProvider =
     NotifierProvider<ForgotPasswordController, ForgotPasswordState>(
         ForgotPasswordController.new);
 
+// ─── PROFILE / ACCOUNT ACTION CONTROLLER ───
+class ProfileActionState {
+  final bool isLoading;
+  final String? errorMessage;
+  final String? successMessage;
+
+  const ProfileActionState({
+    this.isLoading = false,
+    this.errorMessage,
+    this.successMessage,
+  });
+}
+
+class ProfileActionController extends Notifier<ProfileActionState> {
+  @override
+  ProfileActionState build() => const ProfileActionState();
+
+  Future<bool> logout() async {
+    state = const ProfileActionState(isLoading: true);
+    try {
+      final dataSource = ref.read(authRemoteDataSourceProvider);
+      await dataSource.logout();
+      state = const ProfileActionState(isLoading: false, successMessage: 'User logged out successfully');
+      return true;
+    } catch (e) {
+      final cleanMsg = e.toString().replaceAll('Exception: ', '');
+      state = ProfileActionState(isLoading: false, errorMessage: cleanMsg);
+      return false;
+    }
+  }
+
+  Future<bool> deleteAccount({required String password}) async {
+    state = const ProfileActionState(isLoading: true);
+    try {
+      final dataSource = ref.read(authRemoteDataSourceProvider);
+      final res = await dataSource.deleteAccount(password: password);
+      final msg = res['message'] as String? ?? 'Account deleted successfully';
+      state = ProfileActionState(isLoading: false, successMessage: msg);
+      return true;
+    } catch (e) {
+      final cleanMsg = e.toString().replaceAll('Exception: ', '');
+      state = ProfileActionState(isLoading: false, errorMessage: cleanMsg);
+      return false;
+    }
+  }
+}
+
+final profileActionControllerProvider =
+    NotifierProvider<ProfileActionController, ProfileActionState>(
+        ProfileActionController.new);
+
 // Legacy compat provider
 final authProvider = NotifierProvider<AuthController, bool>(AuthController.new);
 

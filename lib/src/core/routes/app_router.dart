@@ -65,7 +65,15 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.shopDetailsSetup,
-        builder: (context, state) => const ShopDetailsSetupPage(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final isEditing = extra?['isEditing'] as bool? ?? false;
+          return ShopDetailsSetupPage(isEditing: isEditing);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.openingHours,
+        builder: (context, state) => const OpeningHoursPage(),
       ),
       GoRoute(
         path: AppRoutes.findShop,

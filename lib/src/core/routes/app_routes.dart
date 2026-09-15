@@ -16,6 +16,7 @@ class AppRoutes {
   static const String subscriptionPayment = '/subscription-payment';
   static const String subscriptionSuccess = '/subscription-success';
   static const String shopDetailsSetup = '/shop-details-setup';
+  static const String openingHours = '/opening-hours';
 
   static const String findShop = '/find-shop';
   static const String shopDetails = '/shop-details';
@@ -41,3 +42,4 @@ class AppRoutes {
   static const String customerDetails = '/customer-details';
   static const String redemptionHistory = '/redemption-history';
 }
+

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
 import '../controllers/auth_controller.dart';
@@ -11,11 +12,11 @@ class RegisterPage extends ConsumerStatefulWidget {
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  final _fullNameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final _fullNameController = TextEditingController(text: kDebugMode ? "TestUser" : "");
+  final _emailController = TextEditingController(text: kDebugMode ? "bifigow685@hideam.com" : "");
+  final _phoneController = TextEditingController(text: kDebugMode ? "0123456789" : "");
+  final _passwordController = TextEditingController(text: kDebugMode ? "123456A" : "");
+  final _confirmPasswordController = TextEditingController(text: kDebugMode ? "123456A" : "");
 
   @override
   void dispose() {

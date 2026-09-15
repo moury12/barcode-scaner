@@ -1,10 +1,37 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
+  Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
+    final success = await ref
+        .read(profileActionControllerProvider.notifier)
+        .logout();
+
+    if (!context.mounted) return;
+    final state = ref.read(profileActionControllerProvider);
+
+    if (success) {
+      CustomSnackbar.show(
+        context,
+        state.successMessage ?? 'User logged out successfully',
+        isError: false,
+      );
+    } else {
+      CustomSnackbar.show(
+        context,
+        state.errorMessage ?? 'Logout failed',
+        isError: true,
+      );
+    }
+    context.go(AppRoutes.login);
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileState = ref.watch(profileActionControllerProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const CustomText("Profile", variant: TextVariant.titleLarge),
@@ -59,12 +86,6 @@ class ProfilePage extends StatelessWidget {
             _buildGroupHeader("MEMBERSHIP"),
             space8H,
             _buildProfileCard([
-              // _buildMenuItem(
-              //   icon: Icons.storefront_outlined,
-              //   title: "Change Home Shop",
-              //   onTap: () => context.push(AppRoutes.findShop),
-              // ),
-              // const Divider(height: 1),
               _buildMenuItem(
                 icon: Icons.card_membership_outlined,
                 title: "Subscription Details",
@@ -93,7 +114,9 @@ class ProfilePage extends StatelessWidget {
 
             // Logout Button
             ButtonTapWidget(
-              onTap: () => context.go(AppRoutes.login),
+              onTap: profileState.isLoading
+                  ? null
+                  : () => _handleLogout(context, ref),
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 14),
@@ -102,13 +125,22 @@ class ProfilePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.red.shade100),
                 ),
-                child: const Center(
-                  child: CustomText(
-                    "Log Out",
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    variant: TextVariant.bodyMedium,
-                  ),
+                child: Center(
+                  child: profileState.isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.red,
+                          ),
+                        )
+                      : const CustomText(
+                          "Log Out",
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          variant: TextVariant.bodyMedium,
+                        ),
                 ),
               ),
             ),
