@@ -175,6 +175,54 @@ class OpeningHourController extends Notifier<OpeningHourState> {
       return false;
     }
   }
+  Future<bool> updateOpeningHour({
+    required String id,
+    String? day,
+    String? openTime,
+    String? closeTime,
+    bool? isClosed,
+  }) async {
+    state = state.copyWith(isAdding: true, errorMessage: null, successMessage: null);
+    try {
+      final ds = ref.read(shopRemoteDataSourceProvider);
+      await ds.updateOpeningHour(
+        id: id,
+        day: day,
+        openTime: openTime,
+        closeTime: closeTime,
+        isClosed: isClosed,
+      );
+      await fetchOpeningHours();
+      state = state.copyWith(
+        isAdding: false,
+        successMessage: 'Opening hour updated successfully',
+      );
+      return true;
+    } catch (e) {
+      final msg = e.toString().replaceAll('Exception: ', '');
+      state = state.copyWith(isAdding: false, errorMessage: msg);
+      return false;
+    }
+  }
+
+  Future<bool> deleteOpeningHour(String id) async {
+    state = state.copyWith(isAdding: true, errorMessage: null, successMessage: null);
+    try {
+      final ds = ref.read(shopRemoteDataSourceProvider);
+      await ds.deleteOpeningHour(id);
+      final newHours = state.hours.where((h) => h.id != id).toList();
+      state = state.copyWith(
+        isAdding: false,
+        hours: newHours,
+        successMessage: 'Opening hour deleted successfully',
+      );
+      return true;
+    } catch (e) {
+      final msg = e.toString().replaceAll('Exception: ', '');
+      state = state.copyWith(isAdding: false, errorMessage: msg);
+      return false;
+    }
+  }
 }
 
 final openingHourControllerProvider =

@@ -14,6 +14,7 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
   final _dayController = TextEditingController();
   TimeOfDay? _openTime;
   TimeOfDay? _closeTime;
+  String? _editingId;
 
   @override
   void initState() {
@@ -31,9 +32,10 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
 
   String _formatTime(TimeOfDay t) {
     final hour = t.hourOfPeriod == 0 ? 12 : t.hourOfPeriod;
+    final hourStr = hour.toString().padLeft(2, '0');
     final minute = t.minute.toString().padLeft(2, '0');
     final period = t.period == DayPeriod.am ? 'AM' : 'PM';
-    return '$hour:$minute $period';
+    return '$hourStr:$minute $period';
   }
 
   Future<void> _pickTime({required bool isOpen}) async {
@@ -61,7 +63,41 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
     }
   }
 
-  Future<void> _handleAdd() async {
+  TimeOfDay? _parseTime(String time) {
+    try {
+      final parts = time.split(' ');
+      final timeParts = parts[0].split(':');
+      var h = int.parse(timeParts[0]);
+      final m = int.parse(timeParts[1]);
+      if (parts.length > 1) {
+        if (parts[1].toUpperCase() == 'PM' && h != 12) h += 12;
+        if (parts[1].toUpperCase() == 'AM' && h == 12) h = 0;
+      }
+      return TimeOfDay(hour: h, minute: m);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  void _populateEditForm(OpeningHourModel hour) {
+    setState(() {
+      _editingId = hour.id;
+      _dayController.text = hour.day;
+      _openTime = _parseTime(hour.openTime);
+      _closeTime = _parseTime(hour.closeTime);
+    });
+  }
+
+  void _cancelEdit() {
+    setState(() {
+      _editingId = null;
+      _dayController.clear();
+      _openTime = null;
+      _closeTime = null;
+    });
+  }
+
+  Future<void> _handleSave() async {
     final day = _dayController.text.trim();
     if (day.isEmpty) {
       CustomSnackbar.show(context, 'Please enter a day or range', isError: true);
@@ -76,24 +112,39 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
       return;
     }
 
-    final success = await ref.read(openingHourControllerProvider.notifier).addOpeningHour(
-          day: day,
-          openTime: _formatTime(_openTime!),
-          closeTime: _formatTime(_closeTime!),
-        );
+    final isUpdating = _editingId != null;
+    final success = isUpdating
+        ? await ref.read(openingHourControllerProvider.notifier).updateOpeningHour(
+            id: _editingId!,
+            day: day,
+            openTime: _formatTime(_openTime!),
+            closeTime: _formatTime(_closeTime!),
+          )
+        : await ref.read(openingHourControllerProvider.notifier).addOpeningHour(
+            day: day,
+            openTime: _formatTime(_openTime!),
+            closeTime: _formatTime(_closeTime!),
+          );
 
     if (!mounted) return;
 
     if (success) {
-      _dayController.clear();
-      setState(() {
-        _openTime = null;
-        _closeTime = null;
-      });
-      CustomSnackbar.show(context, 'Opening hour added!', isError: false);
+      _cancelEdit();
+      CustomSnackbar.show(context, isUpdating ? 'Opening hour updated!' : 'Opening hour added!', isError: false);
     } else {
       final err = ref.read(openingHourControllerProvider).errorMessage;
-      CustomSnackbar.show(context, err ?? 'Failed to add', isError: true);
+      CustomSnackbar.show(context, err ?? 'Failed to save', isError: true);
+    }
+  }
+
+  Future<void> _handleDelete(String id) async {
+    final success = await ref.read(openingHourControllerProvider.notifier).deleteOpeningHour(id);
+    if (!mounted) return;
+    if (success) {
+      CustomSnackbar.show(context, 'Opening hour deleted!', isError: false);
+    } else {
+      final err = ref.read(openingHourControllerProvider).errorMessage;
+      CustomSnackbar.show(context, err ?? 'Failed to delete', isError: true);
     }
   }
 
@@ -148,10 +199,20 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CustomText(
-                    'Add New Hours',
-                    fontWeight: FontWeight.bold,
-                    variant: TextVariant.titleMedium,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        _editingId == null ? 'Add New Hours' : 'Edit Hours',
+                        fontWeight: FontWeight.bold,
+                        variant: TextVariant.titleMedium,
+                      ),
+                      if (_editingId != null)
+                        TextButton(
+                          onPressed: _cancelEdit,
+                          child: const Text('Cancel', style: TextStyle(color: AppColors.kPrimaryColor)),
+                        ),
+                    ],
                   ),
                   space12H,
                   CustomTextField(
@@ -169,10 +230,10 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
                   ),
                   space16H,
                   CustomButton(
-                    text: '+ Add Opening Hour',
+                    text: _editingId == null ? '+ Add Opening Hour' : 'Update Opening Hour',
                     backgroundColor: AppColors.kPrimaryColor,
                     isLoading: state.isAdding,
-                    onPressed: state.isAdding ? null : _handleAdd,
+                    onPressed: state.isAdding ? null : _handleSave,
                   ),
                 ],
               ),
@@ -302,6 +363,22 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
                 variant: TextVariant.labelSmall,
               ),
             ),
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'edit') {
+                _populateEditForm(hour);
+              } else if (value == 'delete') {
+                _handleDelete(hour.id);
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: 'edit', child: Text('Edit')),
+              const PopupMenuItem(
+                  value: 'delete',
+                  child: Text('Delete', style: TextStyle(color: Colors.red))),
+            ],
+            icon: const Icon(Icons.more_vert, color: Colors.grey),
+          ),
         ],
       ),
     );

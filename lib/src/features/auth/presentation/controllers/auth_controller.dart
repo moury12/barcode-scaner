@@ -40,6 +40,7 @@ class LoginController extends Notifier<LoginState> {
         if (accessToken != null && refreshToken != null) {
           final storage = ref.read(localStorageServiceProvider);
           await storage.saveTokens(accessToken, refreshToken);
+          ref.invalidate(onboardingRoleProvider);
         }
       }
 

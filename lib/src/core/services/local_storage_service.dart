@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +23,21 @@ class LocalStorageService {
 
   Future<bool> saveTokens(String accessToken, String refreshToken) async {
     await _prefs.setString(_keyAccessToken, accessToken);
+
+    try {
+      final parts = accessToken.split('.');
+      if (parts.length == 3) {
+        final payloadStr = parts[1];
+        final normalized = base64Url.normalize(payloadStr);
+        final payload = utf8.decode(base64Url.decode(normalized));
+        final data = jsonDecode(payload);
+        final role = data['role'] as String?;
+        if (role != null) {
+          await saveUserRole(role);
+        }
+      }
+    } catch (_) {}
+
     return await _prefs.setString(_keyRefreshToken, refreshToken);
   }
 

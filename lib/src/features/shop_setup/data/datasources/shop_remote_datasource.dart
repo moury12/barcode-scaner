@@ -29,6 +29,16 @@ abstract class ShopRemoteDataSource {
   });
 
   Future<List<OpeningHourModel>> getOpeningHours();
+
+  Future<bool> updateOpeningHour({
+    required String id,
+    String? day,
+    String? openTime,
+    String? closeTime,
+    bool? isClosed,
+  });
+
+  Future<bool> deleteOpeningHour(String id);
 }
 
 class ShopRemoteDataSourceImpl implements ShopRemoteDataSource {
@@ -137,7 +147,8 @@ class ShopRemoteDataSourceImpl implements ShopRemoteDataSource {
     required String day,
     required String openTime,
     required String closeTime,
-  }) async {
+  })
+   async {
     final response = await _api.post(
       '/opening-hour/create-opening-hour',
       data: {
@@ -173,6 +184,49 @@ class ShopRemoteDataSourceImpl implements ShopRemoteDataSource {
     final msg = (response.data is Map && response.data['message'] != null)
         ? response.data['message']
         : 'Failed to fetch opening hours';
+    throw Exception(msg);
+  }
+
+  @override
+  Future<bool> updateOpeningHour({
+    required String id,
+    String? day,
+    String? openTime,
+    String? closeTime,
+    bool? isClosed,
+  }) async {
+    final data = <String, dynamic>{};
+    if (day != null) data['day'] = day;
+    if (openTime != null) data['openTime'] = openTime;
+    if (closeTime != null) data['closeTime'] = closeTime;
+    if (isClosed != null) data['isClosed'] = isClosed;
+
+    final response = await _api.patch(
+      '/opening-hour/update-opening-hour/$id',
+      data: data,
+    );
+
+    if (response.data != null && response.data['success'] == true) {
+      return true;
+    }
+    final msg = (response.data is Map && response.data['message'] != null)
+        ? response.data['message']
+        : 'Failed to update opening hour';
+    throw Exception(msg);
+  }
+
+  @override
+  Future<bool> deleteOpeningHour(String id) async {
+    final response = await _api.delete(
+      '/opening-hour/delete-opening-hour/$id',
+    );
+
+    if (response.data != null && response.data['success'] == true) {
+      return true;
+    }
+    final msg = (response.data is Map && response.data['message'] != null)
+        ? response.data['message']
+        : 'Failed to delete opening hour';
     throw Exception(msg);
   }
 }

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
-import '../controllers/auth_controller.dart';
 import '../../../shop_setup/data/datasources/shop_remote_datasource.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -20,7 +19,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     text: kDebugMode ? "tanzibamouri00@gmail.com" : "",
   );
   final _passwordController = TextEditingController(
-    text: kDebugMode ? "Password123" : "",
+    text: kDebugMode ? "1234567A" : "",
   );
 
   @override

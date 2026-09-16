@@ -26,7 +26,14 @@ final onboardingStepProvider =
 
 class OnboardingRoleNotifier extends Notifier<String?> {
   @override
-  String? build() => 'customer';
+  String? build() {
+    final storage = ref.read(localStorageServiceProvider);
+    final storedRole = storage.userRole;
+    if (storedRole != null) {
+      return storedRole == 'owner' ? 'shop_owner' : storedRole;
+    }
+    return 'customer';
+  }
 
   void selectRole(String role) => state = role;
 }
