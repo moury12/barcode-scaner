@@ -81,7 +81,11 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.shopDetails,
-        builder: (context, state) => const ShopDetailsPage(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final shopId = extra?['shopId'] as String? ?? '';
+          return ShopDetailsPage(shopId: shopId);
+        },
       ),
       GoRoute(
         path: AppRoutes.scanShopQr,
@@ -116,6 +120,10 @@ class AppRouter {
         builder: (context, state) => const HelpSupportPage(),
       ),
       GoRoute(
+        path: AppRoutes.faq,
+        builder: (context, state) => const FaqPage(),
+      ),
+      GoRoute(
         path: AppRoutes.shopDashboard,
         builder: (context, state) => const ShopDashboardPage(),
       ),
@@ -129,15 +137,27 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.customerRequest,
-        builder: (context, state) => const CustomerRequestPage(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final customer = extra?['customer'] as CustomerMembershipModel?;
+          return CustomerRequestPage(customer: customer);
+        },
       ),
       GoRoute(
         path: AppRoutes.confirmActivation,
-        builder: (context, state) => const ConfirmActivationPage(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final customerName = extra?['customerName'] as String?;
+          return ConfirmActivationPage(customerName: customerName);
+        },
       ),
       GoRoute(
         path: AppRoutes.customerDetails,
-        builder: (context, state) => const CustomerDetailsPage(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final customer = extra?['customer'] as CustomerMembershipModel?;
+          return CustomerDetailsPage(customer: customer);
+        },
       ),
       GoRoute(
         path: AppRoutes.redemptionHistory,

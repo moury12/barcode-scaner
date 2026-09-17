@@ -1,10 +1,14 @@
 import '../../../../src_export.dart';
 
 class ConfirmActivationPage extends StatelessWidget {
-  const ConfirmActivationPage({super.key});
+  final String? customerName;
+
+  const ConfirmActivationPage({super.key, this.customerName});
 
   @override
   Widget build(BuildContext context) {
+    final name = customerName != null && customerName!.isNotEmpty ? customerName! : 'Customer';
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -26,8 +30,8 @@ class ConfirmActivationPage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               space8H,
-              const CustomText(
-                "Marcus Thorne is now an active member and can redeem daily drinks at your shop.",
+              CustomText(
+                "$name is now an active member and can redeem benefits at your shop.",
                 textAlign: TextAlign.center,
                 color: AppColors.kBrownTextColor,
               ),
@@ -35,7 +39,7 @@ class ConfirmActivationPage extends StatelessWidget {
               CustomButton(
                 text: "Back to Customer List",
                 backgroundColor: AppColors.kSetupButtonColor,
-                onPressed: () => context.go(AppRoutes.mainLayout),
+                onPressed: () => context.pop(),
               ),
             ],
           ),

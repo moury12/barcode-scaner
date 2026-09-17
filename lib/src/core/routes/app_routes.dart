@@ -32,6 +32,7 @@ class AppRoutes {
   static const String alreadyRedeemed = '/already-redeemed';
   static const String personalInfo = '/personal-info';
   static const String helpSupport = '/help-support';
+  static const String faq = '/faq';
 
   static const String shopDashboard = '/shop-dashboard';
   static const String verifyRedemption = '/verify-redemption';

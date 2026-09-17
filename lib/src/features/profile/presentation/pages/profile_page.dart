@@ -105,6 +105,12 @@ class ProfilePage extends ConsumerWidget {
               ),
               const Divider(height: 1),
               _buildMenuItem(
+                icon: Icons.question_answer_outlined,
+                title: "FAQ",
+                onTap: () => context.push(AppRoutes.faq),
+              ),
+              const Divider(height: 1),
+              _buildMenuItem(
                 icon: Icons.description_outlined,
                 title: "Terms & Privacy Policy",
                 onTap: () {},

@@ -91,7 +91,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           if (mounted) context.go(AppRoutes.shopDetailsSetup);
         }
       } else {
-        context.go(AppRoutes.mainLayout);
+        context.go(AppRoutes.findShop);
       }
     } else {
       CustomSnackbar.show(
