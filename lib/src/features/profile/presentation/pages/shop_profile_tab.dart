@@ -48,10 +48,16 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const CustomText('Log Out', color: Colors.white, fontWeight: FontWeight.bold),
+            child: const CustomText(
+              'Log Out',
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -59,7 +65,9 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
 
     if (confirmed != true || !mounted) return;
 
-    final success = await ref.read(profileActionControllerProvider.notifier).logout();
+    final success = await ref
+        .read(profileActionControllerProvider.notifier)
+        .logout();
     if (!mounted) return;
 
     if (success) {
@@ -88,7 +96,9 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
           : RefreshIndicator(
               onRefresh: () async {
                 ref.read(shopControllerProvider.notifier).fetchMyShop();
-                ref.read(openingHourControllerProvider.notifier).fetchOpeningHours();
+                ref
+                    .read(openingHourControllerProvider.notifier)
+                    .fetchOpeningHours();
               },
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -111,7 +121,13 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
 
                     space8H,
 
-                    // ─── Shop Profile Menu Item ───
+                    // // ─── Shop Profile Menu Item ───
+                    // ProfileMenuItem(
+                    //   icon: Icons.person_outline,
+                    //   title: "Personal Information",
+                    //   onTap: () => context.push(AppRoutes.personalInfo),
+                    // ),
+                    // space8H,
                     ProfileMenuItem(
                       icon: Icons.storefront,
                       title: "Shop Profile",
@@ -137,13 +153,22 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
                       title: "Current Plan",
                     ),
                     space8H,
-                    const ProfileMenuItem(
+                    ProfileMenuItem(
                       icon: Icons.help_outline,
                       title: "Help & Support",
+                      onTap: () => context.push(AppRoutes.helpSupport),
                     ),
-                    const ProfileMenuItem(
+                    space8H,
+                    ProfileMenuItem(
+                      icon: Icons.description_outlined,
+                      title: "Terms & Conditions",
+                      onTap: () => context.push(AppRoutes.termsCondition),
+                    ),
+                    space8H,
+                    ProfileMenuItem(
                       icon: Icons.privacy_tip_outlined,
-                      title: "Terms & Privacy",
+                      title: "Privacy Policy",
+                      onTap: () => context.push(AppRoutes.privacyPolicy),
                     ),
                     space24H,
                     ProfileMenuItem(
@@ -163,8 +188,8 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
     final statusColor = shop.status == 'active'
         ? Colors.green
         : shop.status == 'pending'
-            ? Colors.orange
-            : Colors.grey;
+        ? Colors.orange
+        : Colors.grey;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -223,7 +248,8 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
                     color: AppColors.kBrownTextColor,
                   ),
                 ],
-                if (shop.contactNumber != null && shop.contactNumber!.isNotEmpty) ...[
+                if (shop.contactNumber != null &&
+                    shop.contactNumber!.isNotEmpty) ...[
                   space2H,
                   CustomText(
                     shop.contactNumber!,
@@ -297,7 +323,11 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
                   children: [
-                    const Icon(Icons.access_time, size: 16, color: AppColors.kPrimaryColor),
+                    const Icon(
+                      Icons.access_time,
+                      size: 16,
+                      color: AppColors.kPrimaryColor,
+                    ),
                     space8W,
                     Expanded(
                       child: CustomText(

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:barcode_scaner/src/features/profile/data/datasources/faq_remote_datasource.dart';
 import 'package:barcode_scaner/src/features/profile/data/models/faq_model.dart';

@@ -33,6 +33,8 @@ class AppRoutes {
   static const String personalInfo = '/personal-info';
   static const String helpSupport = '/help-support';
   static const String faq = '/faq';
+  static const String termsCondition = '/terms-condition';
+  static const String privacyPolicy = '/privacy-policy';
 
   static const String shopDashboard = '/shop-dashboard';
   static const String verifyRedemption = '/verify-redemption';

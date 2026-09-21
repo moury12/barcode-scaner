@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
-import '../controllers/auth_controller.dart';
 
 class ResetPasswordPage extends ConsumerStatefulWidget {
   final String? email;

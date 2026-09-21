@@ -48,6 +48,7 @@ dependencies:
   logger: ^2.8.0
   shared_preferences: ^2.5.5
   qr_flutter: ^4.1.0
+  flutter_widget_from_html: ^0.17.4
 
 dev_dependencies:
   flutter_test:

@@ -9,5 +9,8 @@ export 'widgets/profile_widgets.dart';
 export 'widgets/seller_step_widgets.dart';
 export 'widgets/shop_plan_card.dart';
 export 'widgets/profile_menu_item.dart';
+export 'pages/legal_content_page.dart';
 export 'controllers/become_seller_controller.dart';
-
+export 'controllers/user_profile_controller.dart';
+export '../data/models/user_profile_model.dart';
+export '../data/datasources/user_remote_datasource.dart';

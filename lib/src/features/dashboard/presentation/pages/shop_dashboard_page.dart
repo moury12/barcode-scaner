@@ -7,13 +7,16 @@ class ShopDashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const CustomText(AppStaticStrings.appName, variant: TextVariant.titleLarge,),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_none),
-          ),
-        ],
+        title: const CustomText(
+          AppStaticStrings.appName,
+          variant: TextVariant.titleLarge,
+        ),
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {},
+        //     icon: const Icon(Icons.notifications_none),
+        //   ),
+        // ],
       ),
       body: SingleChildScrollView(
         padding: AppPadding.getPadding12(context),

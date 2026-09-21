@@ -18,7 +18,15 @@ class ScannerPage extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          const ScannerViewfinderFrame(),
+          GestureDetector(
+            onTap: () {
+              context.push(
+                AppRoutes.manualCodeEntry,
+                extra: {'qrCode': 'HH-COFFEE-EBD834'},
+              );
+            },
+            child: const ScannerViewfinderFrame(),
+          ),
           Positioned(
             left: 12,
             right: 12,

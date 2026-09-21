@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/datasources/customer_shop_remote_datasource.dart';
-import '../../data/models/customer_shop_model.dart';
 import '../../data/models/single_customer_shop_model.dart';
 
 // ─────────────────────────────────────────────

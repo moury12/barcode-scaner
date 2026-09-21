@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:barcode_scaner/src/core/services/api_service.dart';
-import '../models/customer_shop_model.dart';
 import '../models/single_customer_shop_model.dart';
 
 import '../models/my_membership_model.dart';

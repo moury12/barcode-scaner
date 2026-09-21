@@ -124,6 +124,20 @@ class AppRouter {
         builder: (context, state) => const FaqPage(),
       ),
       GoRoute(
+        path: AppRoutes.termsCondition,
+        builder: (context, state) => const LegalContentPage(
+          contentType: 'terms-condition',
+          title: 'Terms & Conditions',
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.privacyPolicy,
+        builder: (context, state) => const LegalContentPage(
+          contentType: 'privacy-policy',
+          title: 'Privacy Policy',
+        ),
+      ),
+      GoRoute(
         path: AppRoutes.shopDashboard,
         builder: (context, state) => const ShopDashboardPage(),
       ),
@@ -133,7 +147,11 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.manualCodeEntry,
-        builder: (context, state) => const ManualCodeEntryPage(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final code = extra?['qrCode'] as String?;
+          return ManualCodeEntryPage(initialCode: code);
+        },
       ),
       GoRoute(
         path: AppRoutes.customerRequest,

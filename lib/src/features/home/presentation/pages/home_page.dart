@@ -33,10 +33,11 @@ class HomePage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomText(
-                selectedMembership != null
-                    ? "Welcome to ${selectedMembership.shopName}"
-                    : "Welcome to Heritage & Hearth",
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                "Welcome to Heritage & Hearth",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
               ),
               space8H,
 
@@ -54,10 +55,13 @@ class HomePage extends ConsumerWidget {
                       return ChoiceChip(
                         label: CustomText(
                           item.shopName,
-                          color: isSelected ? Colors.white : AppColors.kTextColor,
+                          color: isSelected
+                              ? Colors.white
+                              : AppColors.kTextColor,
                           variant: TextVariant.labelSmall,
-                          fontWeight:
-                              isSelected ? FontWeight.bold : FontWeight.normal,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                         ),
                         selected: isSelected,
                         selectedColor: AppColors.kPrimaryColor,

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../src_export.dart';
-import '../../presentation/controllers/shop_controller.dart';
 
 class ShopDetailsSetupPage extends ConsumerStatefulWidget {
   final bool isEditing;
@@ -196,6 +195,9 @@ class _ShopDetailsSetupPageState extends ConsumerState<ShopDetailsSetupPage> {
   }
 
   Widget _logoUploader() {
+    final shop = ref.watch(shopControllerProvider).shop;
+    final existingImgUrl = shop?.image ?? '';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -209,7 +211,7 @@ class _ShopDetailsSetupPageState extends ConsumerState<ShopDetailsSetupPage> {
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                color: _imageFile != null
+                color: (_imageFile != null || existingImgUrl.isNotEmpty)
                     ? AppColors.kPrimaryColor
                     : Colors.grey.shade400,
                 style: BorderStyle.solid,
@@ -219,30 +221,73 @@ class _ShopDetailsSetupPageState extends ConsumerState<ShopDetailsSetupPage> {
             child: _imageFile != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.file(_imageFile!, fit: BoxFit.cover),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Image.file(_imageFile!, fit: BoxFit.cover),
+                        ),
+                        Positioned(
+                          right: 8,
+                          bottom: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: const BoxDecoration(
+                              color: Colors.black54,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.edit, color: Colors.white, size: 16),
+                          ),
+                        ),
+                      ],
+                    ),
                   )
-                : const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.cloud_upload_outlined,
-                        size: 32,
-                        color: Colors.grey,
+                : existingImgUrl.isNotEmpty
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: CustomNetworkImage(
+                                imageUrl: existingImgUrl,
+                              ),
+                            ),
+                            Positioned(
+                              right: 8,
+                              bottom: 8,
+                              child: Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: const BoxDecoration(
+                                  color: Colors.black54,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.edit, color: Colors.white, size: 16),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.cloud_upload_outlined,
+                            size: 32,
+                            color: Colors.grey,
+                          ),
+                          space8H,
+                          CustomText(
+                            "Upload Shop Logo",
+                            variant: TextVariant.labelMedium,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          space2H,
+                          CustomText(
+                            "PNG, JPG up to 5MB",
+                            variant: TextVariant.bodySmall,
+                            color: Colors.grey,
+                          ),
+                        ],
                       ),
-                      space8H,
-                      CustomText(
-                        "Upload Shop Logo",
-                        variant: TextVariant.labelMedium,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      space2H,
-                      CustomText(
-                        "PNG, JPG up to 5MB",
-                        variant: TextVariant.bodySmall,
-                        color: Colors.grey,
-                      ),
-                    ],
-                  ),
           ),
         ),
       ],

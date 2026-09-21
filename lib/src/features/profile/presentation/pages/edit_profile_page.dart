@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../../src_export.dart';
 
 class EditProfilePage extends ConsumerStatefulWidget {
@@ -9,18 +11,84 @@ class EditProfilePage extends ConsumerStatefulWidget {
 }
 
 class _EditProfilePageState extends ConsumerState<EditProfilePage> {
-  final _firstNameController = TextEditingController(text: "John");
-  final _lastNameController = TextEditingController(text: "Doe");
-  final _emailController = TextEditingController(text: "john.doe@example.com");
-  final _phoneController = TextEditingController(text: "+1 234 567 8900");
+  late TextEditingController _fullNameController;
+  late TextEditingController _emailController;
+  late TextEditingController _phoneController;
+  String? _pickedImagePath;
+  bool _isInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fullNameController = TextEditingController();
+    _emailController = TextEditingController();
+    _phoneController = TextEditingController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isInitialized) {
+      final user = ref.read(userProfileProvider).profile;
+      if (user != null) {
+        _fullNameController.text = user.fullName;
+        _emailController.text = user.email;
+        _phoneController.text = user.phone;
+      }
+      _isInitialized = true;
+    }
+  }
 
   @override
   void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
+    _fullNameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      setState(() {
+        _pickedImagePath = picked.path;
+      });
+    }
+  }
+
+  Future<void> _handleSave() async {
+    final name = _fullNameController.text.trim();
+    final phone = _phoneController.text.trim();
+
+    if (name.isEmpty) {
+      CustomSnackbar.show(context, 'Full name is required', isError: true);
+      return;
+    }
+
+    final success = await ref.read(userProfileProvider.notifier).updateProfile(
+          fullName: name,
+          phone: phone,
+          imagePath: _pickedImagePath,
+        );
+
+    if (!mounted) return;
+    final state = ref.read(userProfileProvider);
+
+    if (success) {
+      CustomSnackbar.show(
+        context,
+        state.successMessage ?? 'Profile updated successfully',
+        isError: false,
+      );
+      context.pop();
+    } else {
+      CustomSnackbar.show(
+        context,
+        state.errorMessage ?? 'Failed to update profile',
+        isError: true,
+      );
+    }
   }
 
   void _showDeleteAccountDialog() {
@@ -106,14 +174,14 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                               .read(profileActionControllerProvider.notifier)
                               .deleteAccount(password: pwd);
 
-                          if (!mounted) return;
+                          if (!context.mounted) return;
                           final state = ref.read(profileActionControllerProvider);
 
                           if (success) {
                             if (dialogContext.mounted) {
                               Navigator.of(dialogContext).pop();
                             }
-                            if (mounted) {
+                            if (context.mounted) {
                               CustomSnackbar.show(
                                 context,
                                 state.successMessage ?? 'Account deleted successfully',
@@ -122,7 +190,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                               context.go(AppRoutes.login);
                             }
                           } else {
-                            if (mounted) {
+                            if (context.mounted) {
                               CustomSnackbar.show(
                                 context,
                                 state.errorMessage ?? 'Failed to delete account',
@@ -156,6 +224,10 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final userProfileState = ref.watch(userProfileProvider);
+    final user = userProfileState.profile;
+    final currentImg = user?.profileImg ?? "";
+
     return Scaffold(
       appBar: AppBar(
         title: const CustomText(
@@ -168,55 +240,80 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
         child: Column(
           children: [
             space16H,
-            const CircleAvatar(
-              radius: 44,
-              backgroundColor: Color(0xFFF1F1F1),
-              child: Icon(
-                Icons.person_outline,
-                size: 44,
-                color: AppColors.kTextColor,
+            GestureDetector(
+              onTap: _pickImage,
+              child: Stack(
+                children: [
+                  if (_pickedImagePath != null)
+                    CircleAvatar(
+                      radius: 48,
+                      backgroundImage: FileImage(File(_pickedImagePath!)),
+                    )
+                  else if (currentImg.isNotEmpty)
+                    ClipOval(
+                      child: CustomNetworkImage(
+                        imageUrl: currentImg,
+                        height: 96,
+                        width: 96,
+                        boxShape: BoxShape.circle,
+                      ),
+                    )
+                  else
+                    const CircleAvatar(
+                      radius: 48,
+                      backgroundColor: Color(0xFFF1F1F1),
+                      child: Icon(
+                        Icons.person_outline,
+                        size: 48,
+                        color: AppColors.kTextColor,
+                      ),
+                    ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(
+                        color: AppColors.kPrimaryColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.camera_alt,
+                        size: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             space24H,
-            Row(
-              children: [
-                Expanded(
-                  child: CustomTextField(
-                    title: "First Name",
-                    textEditingController: _firstNameController,
-                    hintText: "First Name",
-                  ),
-                ),
-                space12W,
-                Expanded(
-                  child: CustomTextField(
-                    title: "Last Name",
-                    textEditingController: _lastNameController,
-                    hintText: "Last Name",
-                  ),
-                ),
-              ],
+            CustomTextField(
+              title: "Full Name",
+              textEditingController: _fullNameController,
+              hintText: "Enter full name",
+              isRequired: true,
             ),
             space12H,
             CustomTextField(
               title: "Email Address",
               textEditingController: _emailController,
               hintText: "Enter email",
+              readOnly: true,
             ),
             space12H,
             CustomTextField(
               title: "Phone Number",
               textEditingController: _phoneController,
               hintText: "Enter phone number",
+              keyboardType: TextInputType.phone,
             ),
             space32H,
             CustomButton(
               text: "Save Changes",
+              isLoading: userProfileState.isLoading,
               backgroundColor: const Color(0xFF536148),
-              onPressed: () {
-                CustomSnackbar.show(context, 'Profile updated successfully');
-                context.pop();
-              },
+              onPressed: _handleSave,
             ),
             space16H,
             CustomButton(
@@ -224,7 +321,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
               isOutlined: true,
               borderColor: Colors.red.shade300,
               textColor: Colors.red,
-              onPressed: () => _showDeleteAccountDialog(),
+              onPressed: _showDeleteAccountDialog,
             ),
             space24H,
           ],

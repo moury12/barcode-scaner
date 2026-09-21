@@ -1,97 +1,195 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
+import '../controllers/redemption_history_controller.dart';
+import '../../data/models/redemption_history_models.dart';
 
-class RedemptionHistoryPage extends StatefulWidget {
+class RedemptionHistoryPage extends ConsumerStatefulWidget {
   const RedemptionHistoryPage({super.key});
 
   @override
-  State<RedemptionHistoryPage> createState() => _RedemptionHistoryPageState();
+  ConsumerState<RedemptionHistoryPage> createState() =>
+      _RedemptionHistoryPageState();
 }
 
-class _RedemptionHistoryPageState extends State<RedemptionHistoryPage> {
-  String _selectedFilter = "Today";
+class _RedemptionHistoryPageState extends ConsumerState<RedemptionHistoryPage> {
+  final ScrollController _scrollController = ScrollController();
 
-  final List<String> _filters = ["Today", "This Week", "This Month"];
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
 
-  final List<Map<String, String>> _redemptions = const [
-    {
-      "name": "Julianna Vane",
-      "drink": "Oat Milk Latte",
-      "time": "10:42 AM",
-      "image": "https://i.pravatar.cc/150?img=32",
-    },
-    {
-      "name": "Marcus Thorne",
-      "drink": "Cortado",
-      "time": "09:15 AM",
-      "image": "https://i.pravatar.cc/150?img=12",
-    },
-    {
-      "name": "Sarah Connor",
-      "drink": "Iced Flat White",
-      "time": "Yesterday, 04:30 PM",
-      "image": "https://i.pravatar.cc/150?img=47",
-    },
-    {
-      "name": "David Miller",
-      "drink": "Espresso Single",
-      "time": "Yesterday, 02:10 PM",
-      "image": "https://i.pravatar.cc/150?img=60",
-    },
-  ];
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 100) {
+      ref.read(ownerRedemptionsProvider.notifier).loadMore();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleVerify(String qrCode) async {
+    final success = await ref
+        .read(ownerRedemptionsProvider.notifier)
+        .verifyQrCode(qrCode);
+
+    if (!mounted) return;
+    if (success) {
+      CustomSnackbar.show(
+        context,
+        'QR Code verified successfully!',
+        isError: false,
+      );
+    } else {
+      CustomSnackbar.show(context, 'Failed to verify QR Code', isError: true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(ownerRedemptionsProvider);
+
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
-        title: const CustomText("Redemption History", variant: TextVariant.titleLarge),
+        title: const CustomText(
+          "Redemption History",
+          variant: TextVariant.titleLarge,
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () =>
+                ref.read(ownerRedemptionsProvider.notifier).fetch(),
+          ),
+        ],
       ),
-      body: Column(
-        children: [
-          space12H,
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: AppPadding.getPadding12H(context),
-            child: Row(
-              children: _filters.map((filter) {
-                final isSelected = filter == _selectedFilter;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: FilterChip(
-                    label: Text(filter),
-                    selected: isSelected,
-                    selectedColor: AppColors.kSetupButtonColor,
-                    labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : AppColors.kTextColor,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    ),
-                    onSelected: (selected) {
-                      if (selected) {
-                        setState(() => _selectedFilter = filter);
-                      }
-                    },
+      body: state.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : state.errorMessage != null
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  space12H,
+                  CustomText(
+                    state.errorMessage!,
+                    color: AppColors.kBrownTextColor,
                   ),
-                );
-              }).toList(),
+                  space16H,
+                  CustomButton(
+                    text: 'Retry',
+                    onPressed: () =>
+                        ref.read(ownerRedemptionsProvider.notifier).fetch(),
+                  ),
+                ],
+              ),
+            )
+          : state.redemptions.isEmpty
+          ? const Center(
+              child: CustomText(
+                "No redemptions found.",
+                color: AppColors.kBrownTextColor,
+              ),
+            )
+          : RefreshIndicator(
+              onRefresh: () =>
+                  ref.read(ownerRedemptionsProvider.notifier).fetch(),
+              child: ListView.separated(
+                controller: _scrollController,
+                padding: AppPadding.getPadding12(context),
+                itemCount:
+                    state.redemptions.length + (state.isLoadingMore ? 1 : 0),
+                separatorBuilder: (context, index) => space12H,
+                itemBuilder: (context, index) {
+                  if (index == state.redemptions.length) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  final item = state.redemptions[index];
+                  return _redemptionTile(item);
+                },
+              ),
             ),
+    );
+  }
+
+  Widget _redemptionTile(OwnerRedemptionModel item) {
+    final name = item.customerName.isNotEmpty ? item.customerName : "Customer";
+    final dateStr = item.createdAt != null
+        ? "${item.createdAt!.day}/${item.createdAt!.month}/${item.createdAt!.year} ${item.createdAt!.hour}:${item.createdAt!.minute.toString().padLeft(2, '0')}"
+        : "";
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: item.customerImg.isNotEmpty
+                ? CustomNetworkImage(
+                    imageUrl: item.customerImg,
+                    height: 44,
+                    width: 44,
+                    radius: 22,
+                  )
+                : const CircleAvatar(
+                    radius: 22,
+                    backgroundColor: Color(0xFFF1F1F1),
+                    child: Icon(Icons.person, color: AppColors.kTextColor),
+                  ),
           ),
-          space12H,
-          Expanded(
-            child: ListView.separated(
-              padding: AppPadding.getPadding12(context),
-              itemCount: _redemptions.length,
-              separatorBuilder: (context, index) => space8H,
-              itemBuilder: (context, index) {
-                final item = _redemptions[index];
-                return RedemptionHistoryTile(
-                  customerName: item["name"]!,
-                  drinkName: item["drink"]!,
-                  timestamp: item["time"]!,
-                  imageUrl: item["image"]!,
-                );
-              },
+          space12W,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomText(name, fontWeight: FontWeight.bold),
+              space2H,
+              CustomText(
+                "Code: ${item.qrCode}",
+                variant: TextVariant.bodySmall,
+                color: AppColors.kBrownTextColor,
+              ),
+              if (dateStr.isNotEmpty)
+                CustomText(dateStr, fontSize: 10, color: Colors.grey),
+            ],
+          ),
+          space8W,
+          if (item.isUsed)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE8F0E8),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const CustomText(
+                "REDEEMED",
+                fontSize: 10,
+                color: Color(0xFF536148),
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          else
+            Expanded(
+              child: CustomButton(
+                text: "Verify",
+                backgroundColor: AppColors.kPrimaryColor,
+                onPressed: () => _handleVerify(item.qrCode),
+              ),
             ),
-          ),
         ],
       ),
     );

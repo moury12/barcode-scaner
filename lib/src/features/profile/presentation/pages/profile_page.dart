@@ -30,7 +30,15 @@ class ProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileState = ref.watch(profileActionControllerProvider);
+    final profileActionState = ref.watch(profileActionControllerProvider);
+    final userProfileState = ref.watch(userProfileProvider);
+    final user = userProfileState.profile;
+
+    final userName = user?.fullName.isNotEmpty == true
+        ? user!.fullName
+        : "User Name";
+    final userEmail = user?.email.isNotEmpty == true ? user!.email : "";
+    final userImg = user?.profileImg ?? "";
 
     return Scaffold(
       appBar: AppBar(
@@ -42,26 +50,39 @@ class ProfilePage extends ConsumerWidget {
           children: [
             space16H,
             // Circular Avatar Profile Header
-            const CircleAvatar(
-              radius: 40,
-              backgroundColor: Color(0xFFF1F1F1),
-              child: Icon(
-                Icons.person_outline,
-                size: 40,
-                color: AppColors.kTextColor,
+            if (userImg.isNotEmpty)
+              ClipOval(
+                child: CustomNetworkImage(
+                  imageUrl: userImg,
+                  height: 80,
+                  width: 80,
+                  boxShape: BoxShape.circle,
+                ),
+              )
+            else
+              const CircleAvatar(
+                radius: 40,
+                backgroundColor: Color(0xFFF1F1F1),
+                child: Icon(
+                  Icons.person_outline,
+                  size: 40,
+                  color: AppColors.kTextColor,
+                ),
               ),
-            ),
             space12H,
-            const CustomText(
-              "John Doe",
+            CustomText(
+              userName,
               variant: TextVariant.headlineMedium,
               fontWeight: FontWeight.bold,
             ),
-            const CustomText(
-              "john.doe@example.com",
-              color: AppColors.kBrownTextColor,
-              variant: TextVariant.bodyMedium,
-            ),
+            if (userEmail.isNotEmpty) ...[
+              space4H,
+              CustomText(
+                userEmail,
+                color: AppColors.kBrownTextColor,
+                variant: TextVariant.bodyMedium,
+              ),
+            ],
             space24H,
 
             // ACCOUNT Group
@@ -75,29 +96,30 @@ class ProfilePage extends ConsumerWidget {
               ),
               const Divider(height: 1),
               _buildMenuItem(
-                icon: Icons.notifications_none,
-                title: "Notifications",
-                onTap: () => context.push(AppRoutes.notification),
-              ),
-            ]),
-            space16H,
-
-            // MEMBERSHIP Group
-            _buildGroupHeader("MEMBERSHIP"),
-            space8H,
-            _buildProfileCard([
-              _buildMenuItem(
                 icon: Icons.storefront_outlined,
                 title: "Find Shop",
                 onTap: () => context.push(AppRoutes.findShop),
               ),
-              const Divider(height: 1),
-              _buildMenuItem(
-                icon: Icons.card_membership_outlined,
-                title: "Subscription Details",
-                onTap: () {},
-              ),
+              // _buildMenuItem(
+              //   icon: Icons.notifications_none,
+              //   title: "Notifications",
+              //   onTap: () => context.push(AppRoutes.notification),
+              // ),
             ]),
+            // space16H,
+
+            // // MEMBERSHIP Group
+            // _buildGroupHeader("MEMBERSHIP"),
+            // space8H,
+            // _buildProfileCard([
+
+            //   // const Divider(height: 1),
+            //   // _buildMenuItem(
+            //   //   icon: Icons.card_membership_outlined,
+            //   //   title: "Subscription Details",
+            //   //   onTap: () {},
+            //   // ),
+            // ]),
             space16H,
 
             // SUPPORT Group
@@ -118,15 +140,21 @@ class ProfilePage extends ConsumerWidget {
               const Divider(height: 1),
               _buildMenuItem(
                 icon: Icons.description_outlined,
-                title: "Terms & Privacy Policy",
-                onTap: () {},
+                title: "Terms & Conditions",
+                onTap: () => context.push(AppRoutes.termsCondition),
+              ),
+              const Divider(height: 1),
+              _buildMenuItem(
+                icon: Icons.privacy_tip_outlined,
+                title: "Privacy Policy",
+                onTap: () => context.push(AppRoutes.privacyPolicy),
               ),
             ]),
             space24H,
 
             // Logout Button
             ButtonTapWidget(
-              onTap: profileState.isLoading
+              onTap: profileActionState.isLoading
                   ? null
                   : () => _handleLogout(context, ref),
               child: Container(
@@ -138,7 +166,7 @@ class ProfilePage extends ConsumerWidget {
                   border: Border.all(color: Colors.red.shade100),
                 ),
                 child: Center(
-                  child: profileState.isLoading
+                  child: profileActionState.isLoading
                       ? const SizedBox(
                           height: 20,
                           width: 20,

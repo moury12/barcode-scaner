@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
-import '../../presentation/controllers/shop_controller.dart';
 import '../../data/models/shop_model.dart';
 
 class OpeningHoursPage extends ConsumerStatefulWidget {

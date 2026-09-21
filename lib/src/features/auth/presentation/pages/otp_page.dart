@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pinput/pinput.dart';
 import '../../../../src_export.dart';
-import '../controllers/auth_controller.dart';
 
 class OtpPage extends ConsumerStatefulWidget {
   final String? email;
