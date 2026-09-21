@@ -13,8 +13,11 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: kDebugMode ? "bifigow685@hideam.com" : "");
-  final _passwordController = TextEditingController(text: kDebugMode ? "123456A" : "");
+  //   final _emailController = TextEditingController(text: kDebugMode ? "bifigow685@hideam.com" : "");
+  // final _passwordController = TextEditingController(text: kDebugMode ? "123456A" : "");
+
+  final _emailController = TextEditingController(text: kDebugMode ? "gonidev715@gmail.com": "");
+  final _passwordController = TextEditingController(text: kDebugMode ? "123abc" : "");
   // final _emailController = TextEditingController(
   //   text: kDebugMode ? "tanzibamouri00@gmail.com" : "",
   // );
