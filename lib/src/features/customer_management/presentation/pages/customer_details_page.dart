@@ -8,7 +8,8 @@ class CustomerDetailsPage extends ConsumerStatefulWidget {
   const CustomerDetailsPage({super.key, this.customer});
 
   @override
-  ConsumerState<CustomerDetailsPage> createState() => _CustomerDetailsPageState();
+  ConsumerState<CustomerDetailsPage> createState() =>
+      _CustomerDetailsPageState();
 }
 
 class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage> {
@@ -93,7 +94,10 @@ class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
-        title: const CustomText("Customer Details", variant: TextVariant.titleLarge),
+        title: const CustomText(
+          "Customer Details",
+          variant: TextVariant.titleLarge,
+        ),
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert),
@@ -101,7 +105,10 @@ class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage> {
             itemBuilder: (context) => [
               const PopupMenuItem(value: 'active', child: Text('Mark Active')),
               const PopupMenuItem(value: 'paused', child: Text('Mark Paused')),
-              const PopupMenuItem(value: 'rejected', child: Text('Mark Rejected')),
+              const PopupMenuItem(
+                value: 'rejected',
+                child: Text('Mark Rejected'),
+              ),
             ],
           ),
         ],
@@ -122,7 +129,9 @@ class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage> {
             ),
             space12H,
             CustomText(
-              customer.customerName.isNotEmpty ? customer.customerName : 'Unnamed Customer',
+              customer.customerName.isNotEmpty
+                  ? customer.customerName
+                  : 'Unnamed Customer',
               variant: TextVariant.headlineMedium,
               fontWeight: FontWeight.bold,
             ),
@@ -142,8 +151,12 @@ class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage> {
             ),
             space24H,
             CustomerInfoCard(
-              email: customer.customerEmail.isNotEmpty ? customer.customerEmail : 'N/A',
-              phone: customer.customerPhone.isNotEmpty ? customer.customerPhone : 'N/A',
+              email: customer.customerEmail.isNotEmpty
+                  ? customer.customerEmail
+                  : 'N/A',
+              phone: customer.customerPhone.isNotEmpty
+                  ? customer.customerPhone
+                  : 'N/A',
             ),
             space16H,
             Container(
@@ -209,14 +222,14 @@ class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage> {
             borderColor: AppColors.kAccentColor.withValues(alpha: 0.5),
             onPressed: () => _handleUpdateStatus('paused'),
           ),
-          space12H,
-          CustomButton(
-            text: "Reject / Deactivate",
-            isOutlined: true,
-            textColor: Colors.red,
-            borderColor: Colors.red.withValues(alpha: 0.3),
-            onPressed: () => _handleUpdateStatus('rejected'),
-          ),
+          // space12H,
+          // CustomButton(
+          //   text: "Reject / Deactivate",
+          //   isOutlined: true,
+          //   textColor: Colors.red,
+          //   borderColor: Colors.red.withValues(alpha: 0.3),
+          //   onPressed: () => _handleUpdateStatus('rejected'),
+          // ),
         ];
       case 'paused':
         return [

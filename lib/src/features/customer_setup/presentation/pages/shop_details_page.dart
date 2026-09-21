@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src_export.dart';
-import '../controllers/customer_setup_controller.dart';
-import 'package:barcode_scaner/src/features/customer_setup/data/models/single_customer_shop_model.dart';
 
 class ShopDetailsPage extends ConsumerStatefulWidget {
   final String shopId;
@@ -40,38 +38,48 @@ class _ShopDetailsPageState extends ConsumerState<ShopDetailsPage> {
       body: detailState.isLoading
           ? const Center(child: CircularProgressIndicator())
           : detailState.errorMessage != null
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                        space12H,
-                        CustomText(
-                          detailState.errorMessage ?? 'An error occurred',
-                          textAlign: TextAlign.center,
-                          color: AppColors.kBrownTextColor,
-                        ),
-                        space16H,
-                        CustomButton(
-                          text: 'Retry',
-                          backgroundColor: AppColors.kPrimaryColor,
-                          onPressed: () => ref.read(shopDetailProvider.notifier).load(widget.shopId),
-                        ),
-                      ],
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      size: 48,
+                      color: Colors.red,
                     ),
-                  ),
-                )
-              : detailState.shop == null
-                  ? const Center(child: CustomText("Shop not found"))
-                  : _buildBody(context, ref, detailState),
+                    space12H,
+                    CustomText(
+                      detailState.errorMessage ?? 'An error occurred',
+                      textAlign: TextAlign.center,
+                      color: AppColors.kBrownTextColor,
+                    ),
+                    space16H,
+                    CustomButton(
+                      text: 'Retry',
+                      backgroundColor: AppColors.kPrimaryColor,
+                      onPressed: () => ref
+                          .read(shopDetailProvider.notifier)
+                          .load(widget.shopId),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : detailState.shop == null
+          ? const Center(child: CustomText("Shop not found"))
+          : _buildBody(context, ref, detailState),
     );
   }
 
-  Widget _buildBody(BuildContext context, WidgetRef ref, ShopDetailState detailState) {
+  Widget _buildBody(
+    BuildContext context,
+    WidgetRef ref,
+    ShopDetailState detailState,
+  ) {
     final shop = detailState.shop!;
-    
+
     // Map opening hours format
     final List<Map<String, String>> hoursList = shop.openingHours.map((h) {
       return {
@@ -87,9 +95,7 @@ class _ShopDetailsPageState extends ConsumerState<ShopDetailsPage> {
             child: Column(
               spacing: 12,
               children: [
-                ShopDetailsBanner(
-                  imageUrl: shop.image,
-                ),
+                ShopDetailsBanner(imageUrl: shop.image),
                 Transform.translate(
                   offset: const Offset(0, -40),
                   child: Container(
@@ -123,9 +129,9 @@ class _ShopDetailsPageState extends ConsumerState<ShopDetailsPage> {
                               color: AppColors.kPrimaryColor,
                             ),
                           ),
-                        const ShopFeatureTags(
-                          tags: ["Vegan Options", "Wifi", "Outdoor Seating"],
-                        ),
+                        // const ShopFeatureTags(
+                        //   tags: ["Vegan Options", "Wifi", "Outdoor Seating"],
+                        // ),
                         const BenefitCard(),
                         OpeningHoursCard(
                           hours: hoursList.isNotEmpty ? hoursList : null,
@@ -151,18 +157,22 @@ class _ShopDetailsPageState extends ConsumerState<ShopDetailsPage> {
           padding: AppPadding.getPadding12(context),
           child: shop.isJoin
               ? CustomButton(
-                  text: shop.membershipStatus == 'pending' 
-                      ? "Request Pending" 
+                  text: shop.membershipStatus == 'pending'
+                      ? "Request Pending"
                       : "Already Joined",
                   backgroundColor: Colors.grey,
                   onPressed: () {}, // Disabled
                 )
               : CustomButton(
-                  text: detailState.isJoining ? "Joining..." : "Join This Shop →",
+                  text: detailState.isJoining
+                      ? "Joining..."
+                      : "Join This Shop →",
                   backgroundColor: const Color(0xFF536148),
                   onPressed: detailState.isJoining
                       ? null
-                      : () => ref.read(shopDetailProvider.notifier).joinShop(widget.shopId),
+                      : () => ref
+                            .read(shopDetailProvider.notifier)
+                            .joinShop(widget.shopId),
                 ),
         ),
       ],

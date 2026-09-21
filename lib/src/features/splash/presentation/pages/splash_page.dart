@@ -28,7 +28,20 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
     if (isCompleted) {
       if (storage.accessToken != null && storage.accessToken!.isNotEmpty) {
-        context.go(AppRoutes.mainLayout);
+        final role = storage.userRole ?? 'customer';
+        if (role == 'customer') {
+          final memberships = await ref
+              .read(myMembershipsProvider.notifier)
+              .fetchMyMemberships();
+          if (!mounted) return;
+          if (memberships.isEmpty) {
+            context.go(AppRoutes.findShop);
+          } else {
+            context.go(AppRoutes.mainLayout);
+          }
+        } else {
+          context.go(AppRoutes.mainLayout);
+        }
       } else {
         context.go(AppRoutes.login);
       }

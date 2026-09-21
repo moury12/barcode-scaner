@@ -5,11 +5,13 @@ import 'custom_button.dart';
 
 // ── AppLoader ─────────────────────────────────────────────
 class AppLoader extends StatelessWidget {
-  const AppLoader({super.key});
+  final double? height;
+  final double? width;
+  const AppLoader({super.key, this.height, this.width});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: CircularProgressIndicator(color: AppColors.kPrimaryColor),
     );
   }

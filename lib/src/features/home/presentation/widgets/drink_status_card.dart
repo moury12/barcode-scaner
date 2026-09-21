@@ -3,11 +3,13 @@ import '../../../../src_export.dart';
 class DrinkStatusCard extends StatelessWidget {
   final bool isAvailable;
   final VoidCallback onShowCode;
+  final String? shopName;
 
   const DrinkStatusCard({
     super.key,
     required this.isAvailable,
     required this.onShowCode,
+    this.shopName,
   });
 
   @override

@@ -87,6 +87,12 @@ class ProfilePage extends ConsumerWidget {
             space8H,
             _buildProfileCard([
               _buildMenuItem(
+                icon: Icons.storefront_outlined,
+                title: "Find Shop",
+                onTap: () => context.push(AppRoutes.findShop),
+              ),
+              const Divider(height: 1),
+              _buildMenuItem(
                 icon: Icons.card_membership_outlined,
                 title: "Subscription Details",
                 onTap: () {},

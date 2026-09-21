@@ -3,10 +3,14 @@ import 'package:barcode_scaner/src/core/services/api_service.dart';
 import '../models/customer_shop_model.dart';
 import '../models/single_customer_shop_model.dart';
 
+import '../models/my_membership_model.dart';
+
 abstract class CustomerShopRemoteDataSource {
   Future<CustomerShopListResponse> getCustomerShops({int page = 1, int limit = 10, String? searchTerm});
   Future<SingleCustomerShopModel> getSingleCustomerShop(String shopId);
   Future<Map<String, dynamic>> joinShop(String shopId);
+  Future<List<MyMembershipModel>> getMyActiveMemberships();
+  Future<Map<String, dynamic>> generateQrCode(String shopId);
 }
 
 class CustomerShopRemoteDataSourceImpl implements CustomerShopRemoteDataSource {
@@ -78,6 +82,45 @@ class CustomerShopRemoteDataSourceImpl implements CustomerShopRemoteDataSource {
     final msg = (response.data is Map && response.data['message'] != null)
         ? response.data['message']
         : 'Failed to join shop';
+    throw Exception(msg);
+  }
+
+  @override
+  Future<List<MyMembershipModel>> getMyActiveMemberships() async {
+    final response = await _api.get(
+      '/membership/my-memberships',
+      queryParameters: {'status': 'active'},
+    );
+
+    if (response.data != null && response.data['success'] == true) {
+      final rawList = response.data['data'] as List<dynamic>? ?? [];
+      return rawList
+          .whereType<Map<String, dynamic>>()
+          .map((e) => MyMembershipModel.fromJson(e))
+          .toList();
+    }
+
+    final msg = (response.data is Map && response.data['message'] != null)
+        ? response.data['message']
+        : 'Failed to fetch active memberships';
+    throw Exception(msg);
+  }
+
+  @override
+  Future<Map<String, dynamic>> generateQrCode(String shopId) async {
+    final response = await _api.post(
+      '/redemption/generate-qr-code',
+      data: {'shopId': shopId},
+    );
+
+    if (response.data != null && response.data['success'] == true) {
+      final data = response.data['data'] as Map<String, dynamic>?;
+      if (data != null) return data;
+    }
+
+    final msg = (response.data is Map && response.data['message'] != null)
+        ? response.data['message']
+        : 'Failed to generate QR code';
     throw Exception(msg);
   }
 }

@@ -13,14 +13,14 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  // final _emailController = TextEditingController(text: kDebugMode ? "bifigow685@hideam.com" : "");
-  // final _passwordController = TextEditingController(text: kDebugMode ? "123456A" : "");
-  final _emailController = TextEditingController(
-    text: kDebugMode ? "tanzibamouri00@gmail.com" : "",
-  );
-  final _passwordController = TextEditingController(
-    text: kDebugMode ? "1234567A" : "",
-  );
+  final _emailController = TextEditingController(text: kDebugMode ? "bifigow685@hideam.com" : "");
+  final _passwordController = TextEditingController(text: kDebugMode ? "123456A" : "");
+  // final _emailController = TextEditingController(
+  //   text: kDebugMode ? "tanzibamouri00@gmail.com" : "",
+  // );
+  // final _passwordController = TextEditingController(
+  //   text: kDebugMode ? "1234567A" : "",
+  // );
 
   @override
   void dispose() {
@@ -91,7 +91,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           if (mounted) context.go(AppRoutes.shopDetailsSetup);
         }
       } else {
-        context.go(AppRoutes.findShop);
+        // Customer role: check active memberships
+        final memberships = await ref
+            .read(myMembershipsProvider.notifier)
+            .fetchMyMemberships(force: true);
+
+        if (!mounted) return;
+
+        if (memberships.isEmpty) {
+          // No active memberships → user must join a shop
+          context.go(AppRoutes.findShop);
+        } else {
+          // Active membership exists → go to main layout
+          context.go(AppRoutes.mainLayout);
+        }
       }
     } else {
       CustomSnackbar.show(

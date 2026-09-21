@@ -18,6 +18,9 @@ class _FindShopPageState extends ConsumerState<FindShopPage> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    Future.microtask(
+      () => ref.read(myMembershipsProvider.notifier).fetchMyMemberships(),
+    );
   }
 
   void _onScroll() {
@@ -141,13 +144,20 @@ class _FindShopPageState extends ConsumerState<FindShopPage> {
                   },
                 ),
               ),
-              space12H,
-              const Center(
-                child: CustomText(
-                  "Have a shop code?",
-                  color: AppColors.kBrownTextColor,
+              if (ref.watch(myMembershipsProvider).memberships.isNotEmpty) ...[
+                space12H,
+                Center(
+                  child: ButtonTapWidget(
+                    onTap: () {
+                      context.go(AppRoutes.mainLayout);
+                    },
+                    child: const CustomText(
+                      "Go to home page",
+                      color: AppColors.kBrownTextColor,
+                    ),
+                  ),
                 ),
-              ),
+              ],
               space12H,
               CustomButton(
                 text: AppStaticStrings.scanShopQr,
