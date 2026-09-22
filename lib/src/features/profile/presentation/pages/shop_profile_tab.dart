@@ -116,18 +116,18 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
                     // ─── Shop Card ───
                     if (shop != null)
                       _shopHeaderCard(shop)
-                    else if (shopState.errorMessage != null)
-                      _errorCard(shopState.errorMessage!),
+                    else
+                      SizedBox.shrink(),
 
                     space8H,
 
-                    // // ─── Shop Profile Menu Item ───
+                    // ─── Shop Profile Menu Item ───
                     // ProfileMenuItem(
                     //   icon: Icons.person_outline,
                     //   title: "Personal Information",
                     //   onTap: () => context.push(AppRoutes.personalInfo),
                     // ),
-                    // space8H,
+                    space8H,
                     ProfileMenuItem(
                       icon: Icons.storefront,
                       title: "Shop Profile",
@@ -349,28 +349,5 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
       ),
     );
   }
-
-  Widget _errorCard(String message) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.red.shade50,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.red.shade200),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.error_outline, color: Colors.red),
-          space8W,
-          Expanded(
-            child: CustomText(
-              message,
-              color: Colors.red,
-              variant: TextVariant.bodySmall,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
+

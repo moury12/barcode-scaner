@@ -19,10 +19,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   // final _emailController = TextEditingController(text: kDebugMode ? "gonidev715@gmail.com": "");
   // final _passwordController = TextEditingController(text: kDebugMode ? "123abc" : "");
   final _emailController = TextEditingController(
-    text: kDebugMode ? "renado4048@findize.com" : "",
+    text: kDebugMode ? "penaya2391@findize.com" : "",
   );
   final _passwordController = TextEditingController(
-    text: kDebugMode ? "123456A" : "",
+    text: kDebugMode ? "owner1235" : "",
   );
 
   @override

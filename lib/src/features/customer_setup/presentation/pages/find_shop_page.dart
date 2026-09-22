@@ -92,41 +92,52 @@ class _FindShopPageState extends ConsumerState<FindShopPage> {
               ),
               space16H,
               Expanded(
-                child: shopAsync.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (err, _) => Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                child: RefreshIndicator(
+                  onRefresh: () => ref.read(shopListProvider.notifier).refresh(),
+                  child: shopAsync.when(
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    error: (err, _) => ListView(
                       children: [
-                        const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                        space12H,
-                        CustomText(
-                          err.toString().replaceAll('Exception: ', ''),
-                          textAlign: TextAlign.center,
-                          color: AppColors.kBrownTextColor,
-                        ),
-                        space16H,
-                        CustomButton(
-                          text: 'Retry',
-                          backgroundColor: AppColors.kPrimaryColor,
-                          onPressed: () => ref.read(shopListProvider.notifier).refresh(),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.4,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                              space12H,
+                              CustomText(
+                                err.toString().replaceAll('Exception: ', ''),
+                                textAlign: TextAlign.center,
+                                color: AppColors.kBrownTextColor,
+                              ),
+                              space16H,
+                              CustomButton(
+                                text: 'Retry',
+                                backgroundColor: AppColors.kPrimaryColor,
+                                onPressed: () => ref.read(shopListProvider.notifier).refresh(),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  data: (state) {
-                    if (state.shops.isEmpty) {
-                      return const Center(
-                        child: CustomText(
-                          'No shops found.',
-                          color: AppColors.kBrownTextColor,
-                        ),
-                      );
-                    }
-                    return RefreshIndicator(
-                      onRefresh: () =>
-                          ref.read(shopListProvider.notifier).refresh(),
-                      child: ListView.separated(
+                    data: (state) {
+                      if (state.shops.isEmpty) {
+                        return ListView(
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.sizeOf(context).height * 0.4,
+                              child: const Center(
+                                child: CustomText(
+                                  'No shops found.',
+                                  color: AppColors.kBrownTextColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                      return ListView.separated(
                         controller: _scrollController,
                         itemCount: state.shops.length + (state.isLoadingMore ? 1 : 0),
                         separatorBuilder: (context, index) => space12H,
@@ -139,12 +150,12 @@ class _FindShopPageState extends ConsumerState<FindShopPage> {
                           }
                           return _shopTile(context, state.shops[index]);
                         },
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
-              if (ref.watch(myMembershipsProvider).memberships.isNotEmpty) ...[
+              // if (ref.watch(myMembershipsProvider).memberships.isNotEmpty) ...[
                 space12H,
                 Center(
                   child: ButtonTapWidget(
@@ -157,7 +168,7 @@ class _FindShopPageState extends ConsumerState<FindShopPage> {
                     ),
                   ),
                 ),
-              ],
+             
               space12H,
               CustomButton(
                 text: AppStaticStrings.scanShopQr,

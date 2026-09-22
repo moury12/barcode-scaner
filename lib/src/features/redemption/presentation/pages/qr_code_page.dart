@@ -136,9 +136,7 @@ class _QrCodePageState extends ConsumerState<QrCodePage> {
         ),
       ),
       body: RefreshIndicator(
-        onRefresh: () async {
-          // await _loadQrCode(forceRefresh: true);
-        },
+        onRefresh: () => _loadQrCode(forceRefresh: true),
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           padding: AppPadding.getPadding24(context),
@@ -293,8 +291,26 @@ class _QrCodePageState extends ConsumerState<QrCodePage> {
                         width: 24,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    else if (_isRedeemed != null)
-                      _redeemedBadge(_isRedeemed!),
+                    else
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _redeemedBadge(_isRedeemed ?? false),
+                          const SizedBox(width: 6),
+                          // Tap to re-check status without generating new QR
+                          GestureDetector(
+                            onTap: _qrCode != null
+                                ? () => _fetchRedeemedStatus(_qrCode!)
+                                : null,
+                            child: const Icon(
+                              Icons.refresh,
+                              size: 18,
+                              color: AppColors.kBrownTextColor,
+                            ),
+                          ),
+                        ],
+                      ),
 
                     space16H,
 
