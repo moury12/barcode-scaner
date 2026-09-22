@@ -45,7 +45,12 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
           response.data['message'] as String? ?? 'QR code verified successfully',
           isError: false,
         );
-        context.push(AppRoutes.verifyRedemption);
+        final data = response.data['data'] as Map<String, dynamic>?;
+        final qrCode = data?['qrCode'] as String? ?? code;
+        context.push(
+          AppRoutes.verifyRedemption,
+          extra: {'qrCode': qrCode},
+        );
       } else {
         final msg = (response.data is Map && response.data['message'] != null)
             ? response.data['message']

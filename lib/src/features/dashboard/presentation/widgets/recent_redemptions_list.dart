@@ -48,6 +48,7 @@ class RecentRedemptionsList extends ConsumerWidget {
             separatorBuilder: (_, __) => space8H,
             itemBuilder: (context, index) {
               final item = items[index];
+              final String img = item.customerImg ;
               final name = item.customerName.isNotEmpty ? item.customerName : "Customer";
               final initials = name.isNotEmpty
                   ? name.split(' ').map((e) => e.isNotEmpty ? e[0] : '').take(2).join()
@@ -58,6 +59,7 @@ class RecentRedemptionsList extends ConsumerWidget {
 
               return RecentRedemptionTile(
                 nameInitials: initials,
+                img: img,
                 customerName: name,
                 drinkName: "Code: ${item.qrCode}",
                 timeAgo: dateStr,

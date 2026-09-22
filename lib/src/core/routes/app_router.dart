@@ -143,7 +143,11 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.verifyRedemption,
-        builder: (context, state) => const CustomerVerifiedPage(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final qrCode = extra?['qrCode'] as String?;
+          return CustomerVerifiedPage(qrCode: qrCode);
+        },
       ),
       GoRoute(
         path: AppRoutes.manualCodeEntry,

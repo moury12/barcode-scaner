@@ -16,14 +16,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   //   final _emailController = TextEditingController(text: kDebugMode ? "bifigow685@hideam.com" : "");
   // final _passwordController = TextEditingController(text: kDebugMode ? "123456A" : "");
 
-  final _emailController = TextEditingController(text: kDebugMode ? "gonidev715@gmail.com": "");
-  final _passwordController = TextEditingController(text: kDebugMode ? "123abc" : "");
-  // final _emailController = TextEditingController(
-  //   text: kDebugMode ? "tanzibamouri00@gmail.com" : "",
-  // );
-  // final _passwordController = TextEditingController(
-  //   text: kDebugMode ? "1234567A" : "",
-  // );
+  // final _emailController = TextEditingController(text: kDebugMode ? "gonidev715@gmail.com": "");
+  // final _passwordController = TextEditingController(text: kDebugMode ? "123abc" : "");
+  final _emailController = TextEditingController(
+    text: kDebugMode ? "renado4048@findize.com" : "",
+  );
+  final _passwordController = TextEditingController(
+    text: kDebugMode ? "123456A" : "",
+  );
 
   @override
   void dispose() {
@@ -117,7 +117,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

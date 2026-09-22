@@ -5,6 +5,7 @@ class RecentRedemptionTile extends StatelessWidget {
   final String customerName;
   final String drinkName;
   final String timeAgo;
+  final String img;
 
   const RecentRedemptionTile({
     super.key,
@@ -12,6 +13,7 @@ class RecentRedemptionTile extends StatelessWidget {
     required this.customerName,
     required this.drinkName,
     required this.timeAgo,
+    required this.img,
   });
 
   @override
@@ -25,15 +27,17 @@ class RecentRedemptionTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            backgroundColor: const Color(0xFFF1F1F1),
-            child: CustomText(
-              nameInitials,
-              variant: TextVariant.labelMedium,
-              color: AppColors.kTextColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          img.isEmpty
+              ? CircleAvatar(
+                  backgroundColor: const Color(0xFFF1F1F1),
+                  child: CustomText(
+                    nameInitials,
+                    variant: TextVariant.labelMedium,
+                    color: AppColors.kTextColor, 
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              : CircleAvatar(backgroundImage: NetworkImage(img)),
           space12W,
           Expanded(
             child: Column(

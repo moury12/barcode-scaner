@@ -5,7 +5,11 @@ import '../models/single_customer_shop_model.dart';
 import '../models/my_membership_model.dart';
 
 abstract class CustomerShopRemoteDataSource {
-  Future<CustomerShopListResponse> getCustomerShops({int page = 1, int limit = 10, String? searchTerm});
+  Future<CustomerShopListResponse> getCustomerShops({
+    int page = 1,
+    int limit = 10,
+    String? searchTerm,
+  });
   Future<SingleCustomerShopModel> getSingleCustomerShop(String shopId);
   Future<Map<String, dynamic>> joinShop(String shopId);
   Future<List<MyMembershipModel>> getMyActiveMemberships();
@@ -88,7 +92,7 @@ class CustomerShopRemoteDataSourceImpl implements CustomerShopRemoteDataSource {
   Future<List<MyMembershipModel>> getMyActiveMemberships() async {
     final response = await _api.get(
       '/membership/my-memberships',
-      queryParameters: {'status': 'active'},
+      queryParameters: {'status': 'active', 'limit': '100'},
     );
 
     if (response.data != null && response.data['success'] == true) {
@@ -126,6 +130,6 @@ class CustomerShopRemoteDataSourceImpl implements CustomerShopRemoteDataSource {
 
 final customerShopRemoteDataSourceProvider =
     Provider<CustomerShopRemoteDataSource>((ref) {
-  final api = ref.watch(apiServiceProvider);
-  return CustomerShopRemoteDataSourceImpl(api);
-});
+      final api = ref.watch(apiServiceProvider);
+      return CustomerShopRemoteDataSourceImpl(api);
+    });

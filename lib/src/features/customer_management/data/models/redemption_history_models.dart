@@ -6,7 +6,7 @@ class OwnerRedemptionModel {
   final String customerPhone;
   final String customerImg;
   final String qrCode;
-  final bool isUsed;
+  final bool isRedeemed;
   final DateTime? expiresAt;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -19,7 +19,7 @@ class OwnerRedemptionModel {
     required this.customerPhone,
     required this.customerImg,
     required this.qrCode,
-    required this.isUsed,
+    required this.isRedeemed,
     this.expiresAt,
     this.createdAt,
     this.updatedAt,
@@ -34,7 +34,8 @@ class OwnerRedemptionModel {
       customerPhone: json['customerPhone'] as String? ?? '',
       customerImg: json['customerImg'] as String? ?? '',
       qrCode: json['qrCode'] as String? ?? '',
-      isUsed: json['isUsed'] as bool? ?? false,
+      // API returns 'isRedeemed' (not 'isUsed')
+      isRedeemed: json['isRedeemed'] as bool? ?? false,
       expiresAt: json['expiresAt'] != null
           ? DateTime.tryParse(json['expiresAt'] as String)
           : null,
@@ -46,28 +47,33 @@ class OwnerRedemptionModel {
           : null,
     );
   }
+
+  /// Alias for backward-compat with code that used the old field name.
+  bool get isUsed => isRedeemed;
 }
 
 class CustomerRedemptionModel {
   final String id;
+  final String shopId;
   final String shopName;
   final String contactNumber;
   final String address;
   final String image;
   final String qrCode;
-  final bool isUsed;
+  final bool isRedeemed;
   final DateTime? expiresAt;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
   const CustomerRedemptionModel({
     required this.id,
+    required this.shopId,
     required this.shopName,
     required this.contactNumber,
     required this.address,
     required this.image,
     required this.qrCode,
-    required this.isUsed,
+    required this.isRedeemed,
     this.expiresAt,
     this.createdAt,
     this.updatedAt,
@@ -76,12 +82,14 @@ class CustomerRedemptionModel {
   factory CustomerRedemptionModel.fromJson(Map<String, dynamic> json) {
     return CustomerRedemptionModel(
       id: json['_id'] as String? ?? '',
+      shopId: json['shopId'] as String? ?? '',
       shopName: json['shopName'] as String? ?? '',
       contactNumber: json['contactNumber'] as String? ?? '',
       address: json['address'] as String? ?? '',
       image: json['image'] as String? ?? '',
       qrCode: json['qrCode'] as String? ?? '',
-      isUsed: json['isUsed'] as bool? ?? false,
+      // API returns 'isRedeemed' (not 'isUsed')
+      isRedeemed: json['isRedeemed'] as bool? ?? false,
       expiresAt: json['expiresAt'] != null
           ? DateTime.tryParse(json['expiresAt'] as String)
           : null,
@@ -93,4 +101,7 @@ class CustomerRedemptionModel {
           : null,
     );
   }
+
+  /// Alias for backward-compat with code that used the old field name.
+  bool get isUsed => isRedeemed;
 }

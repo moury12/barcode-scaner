@@ -12,7 +12,7 @@ class RegisterPage extends ConsumerStatefulWidget {
 class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _fullNameController = TextEditingController(text: kDebugMode ? "TestUser" : "");
-  final _emailController = TextEditingController(text: kDebugMode ? "bifigow685@hideam.com" : "");
+  final _emailController = TextEditingController(text: kDebugMode ? "renado4048@findize.com" : "");
   final _phoneController = TextEditingController(text: kDebugMode ? "0123456789" : "");
   final _passwordController = TextEditingController(text: kDebugMode ? "123456A" : "");
   final _confirmPasswordController = TextEditingController(text: kDebugMode ? "123456A" : "");

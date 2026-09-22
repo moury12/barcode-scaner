@@ -6,18 +6,27 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isRedeemed = ref.watch(isDrinkRedeemedProvider);
     final myMembershipsState = ref.watch(myMembershipsProvider);
     final selectedMembership = ref.watch(selectedMembershipProvider);
     final memberships = myMembershipsState.memberships;
     final userProfileState = ref.watch(userProfileProvider);
 
+    // Watch the API-backed redemption status for the selected shop
+    final redemptionStatusAsync = ref.watch(
+      redemptionStatusProvider(selectedMembership?.shopName),
+    );
+    final isRedeemed = redemptionStatusAsync.maybeWhen(
+      data: (data) => data,
+      orElse: () => false,
+    );
+
     final userImg = userProfileState.profile?.profileImg ?? "";
+    final userName = userProfileState.profile?.fullName ?? "";
 
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-          padding: EdgeInsets.only(left: 8.0),
+          padding: const EdgeInsets.only(left: 8.0),
           child: (userImg.isNotEmpty)
               ? ClipOval(
                   child: CustomNetworkImage(
@@ -29,21 +38,16 @@ class HomePage extends ConsumerWidget {
                 )
               : CustomNetworkImage(imageUrl: "", boxShape: BoxShape.circle),
         ),
-        title: const Text("Customer Dashboard"),
+        title: Text(userName),
         centerTitle: false,
-        // actions: [
-        //   IconButton(
-        //     onPressed: () => context.push(AppRoutes.notification),
-        //     icon: const Icon(Icons.notifications_outlined, color: Colors.black),
-        //   ),
-        // ],
       ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
             await ref.read(myMembershipsProvider.notifier).fetchMyMemberships();
             await ref.read(userProfileProvider.notifier).fetchProfile();
-            // await ref.read(isDrinkRedeemedProvider.notifier).state = false;
+            // Invalidate so the redeemed status refetches for the current shop
+            ref.invalidate(redemptionStatusProvider);
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -51,12 +55,9 @@ class HomePage extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(
+                const CustomText(
                   "Welcome to Heritage & Hearth",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 space8H,
 
@@ -103,7 +104,6 @@ class HomePage extends ConsumerWidget {
                   isAvailable: !isRedeemed,
                   shopName: selectedMembership?.shopName,
                   onShowCode: () {
-                    ref.read(isDrinkRedeemedProvider.notifier).state = true;
                     ref.read(navigationProvider.notifier).state = 1;
                   },
                 ),

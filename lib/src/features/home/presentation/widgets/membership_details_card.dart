@@ -3,16 +3,13 @@ import '../../../../src_export.dart';
 class MembershipDetailsCard extends StatelessWidget {
   final MyMembershipModel? membership;
 
-  const MembershipDetailsCard({
-    super.key,
-    this.membership,
-  });
+  const MembershipDetailsCard({super.key, this.membership});
 
   @override
   Widget build(BuildContext context) {
     final shopName = membership?.shopName.isNotEmpty == true
         ? membership!.shopName
-        : "Coffee House Zürich";
+        : "No Membership";
     final status = membership?.status.isNotEmpty == true
         ? membership!.status[0].toUpperCase() + membership!.status.substring(1)
         : "Active";
@@ -45,7 +42,10 @@ class MembershipDetailsCard extends StatelessWidget {
               const Divider(height: 24),
               _DetailRow(label: "Status", value: status, isStatus: true),
               const Divider(height: 24),
-              const _DetailRow(label: "Daily Benefit", value: "1 Handcrafted Drink"),
+              const _DetailRow(
+                label: "Daily Benefit",
+                value: "1 Handcrafted Drink",
+              ),
             ],
           ),
         ),
