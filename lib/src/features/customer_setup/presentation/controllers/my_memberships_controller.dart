@@ -53,12 +53,18 @@ class MyMembershipsNotifier extends StateNotifier<MyMembershipsState> {
         hasFetched: true,
       );
 
-      // Auto-select first membership if none selected or if current selection is invalid
+      // Auto-select first membership if none selected or update current selection with fresh data
       final currentSelected = _ref.read(selectedMembershipProvider);
       if (memberships.isNotEmpty) {
         if (currentSelected == null ||
             !memberships.any((m) => m.id == currentSelected.id)) {
-          _ref.read(selectedMembershipProvider.notifier).state = memberships.first;
+          _ref.read(selectedMembershipProvider.notifier).state =
+              memberships.first;
+        } else {
+          final refreshedItem = memberships.firstWhere(
+            (m) => m.id == currentSelected.id,
+          );
+          _ref.read(selectedMembershipProvider.notifier).state = refreshedItem;
         }
       } else {
         _ref.read(selectedMembershipProvider.notifier).state = null;

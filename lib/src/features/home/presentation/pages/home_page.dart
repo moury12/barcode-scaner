@@ -44,11 +44,15 @@ class HomePage extends ConsumerWidget {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
-            await ref.read(myMembershipsProvider.notifier).fetchMyMemberships();
+            await ref
+                .read(myMembershipsProvider.notifier)
+                .fetchMyMemberships(force: true);
             await ref.read(userProfileProvider.notifier).fetchProfile();
             await ref.read(customerRedemptionsProvider.notifier).fetch();
             ref.invalidate(
-              redemptionStatusProvider(selectedMembership?.shopName),
+              redemptionStatusProvider(
+                ref.read(selectedMembershipProvider)?.shopName,
+              ),
             );
           },
           child: SingleChildScrollView(
