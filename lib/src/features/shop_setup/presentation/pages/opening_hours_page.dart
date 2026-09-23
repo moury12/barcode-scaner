@@ -99,7 +99,11 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
   Future<void> _handleSave() async {
     final day = _dayController.text.trim();
     if (day.isEmpty) {
-      CustomSnackbar.show(context, 'Please enter a day or range', isError: true);
+      CustomSnackbar.show(
+        context,
+        'Please enter a day or range',
+        isError: true,
+      );
       return;
     }
     if (_openTime == null) {
@@ -113,23 +117,31 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
 
     final isUpdating = _editingId != null;
     final success = isUpdating
-        ? await ref.read(openingHourControllerProvider.notifier).updateOpeningHour(
-            id: _editingId!,
-            day: day,
-            openTime: _formatTime(_openTime!),
-            closeTime: _formatTime(_closeTime!),
-          )
-        : await ref.read(openingHourControllerProvider.notifier).addOpeningHour(
-            day: day,
-            openTime: _formatTime(_openTime!),
-            closeTime: _formatTime(_closeTime!),
-          );
+        ? await ref
+              .read(openingHourControllerProvider.notifier)
+              .updateOpeningHour(
+                id: _editingId!,
+                day: day,
+                openTime: _formatTime(_openTime!),
+                closeTime: _formatTime(_closeTime!),
+              )
+        : await ref
+              .read(openingHourControllerProvider.notifier)
+              .addOpeningHour(
+                day: day,
+                openTime: _formatTime(_openTime!),
+                closeTime: _formatTime(_closeTime!),
+              );
 
     if (!mounted) return;
 
     if (success) {
       _cancelEdit();
-      CustomSnackbar.show(context, isUpdating ? 'Opening hour updated!' : 'Opening hour added!', isError: false);
+      CustomSnackbar.show(
+        context,
+        isUpdating ? 'Opening hour updated!' : 'Opening hour added!',
+        isError: false,
+      );
     } else {
       final err = ref.read(openingHourControllerProvider).errorMessage;
       CustomSnackbar.show(context, err ?? 'Failed to save', isError: true);
@@ -137,7 +149,9 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
   }
 
   Future<void> _handleDelete(String id) async {
-    final success = await ref.read(openingHourControllerProvider.notifier).deleteOpeningHour(id);
+    final success = await ref
+        .read(openingHourControllerProvider.notifier)
+        .deleteOpeningHour(id);
     if (!mounted) return;
     if (success) {
       CustomSnackbar.show(context, 'Opening hour deleted!', isError: false);
@@ -155,7 +169,7 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         title: const CustomText(
           AppStaticStrings.appName,
           variant: TextVariant.titleLarge,
@@ -209,7 +223,10 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
                       if (_editingId != null)
                         TextButton(
                           onPressed: _cancelEdit,
-                          child: const Text('Cancel', style: TextStyle(color: AppColors.kPrimaryColor)),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: AppColors.kPrimaryColor),
+                          ),
                         ),
                     ],
                   ),
@@ -229,7 +246,9 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
                   ),
                   space16H,
                   CustomButton(
-                    text: _editingId == null ? '+ Add Opening Hour' : 'Update Opening Hour',
+                    text: _editingId == null
+                        ? '+ Add Opening Hour'
+                        : 'Update Opening Hour',
                     backgroundColor: AppColors.kPrimaryColor,
                     isLoading: state.isAdding,
                     onPressed: state.isAdding ? null : _handleSave,
@@ -278,7 +297,11 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomText(label, fontWeight: FontWeight.bold, variant: TextVariant.labelMedium),
+          CustomText(
+            label,
+            fontWeight: FontWeight.bold,
+            variant: TextVariant.labelMedium,
+          ),
           space4H,
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
@@ -328,7 +351,11 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
               color: AppColors.kPrimaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.access_time, color: AppColors.kPrimaryColor, size: 20),
+            child: const Icon(
+              Icons.access_time,
+              color: AppColors.kPrimaryColor,
+              size: 20,
+            ),
           ),
           space12W,
           Expanded(
@@ -373,8 +400,9 @@ class _OpeningHoursPageState extends ConsumerState<OpeningHoursPage> {
             itemBuilder: (context) => [
               const PopupMenuItem(value: 'edit', child: Text('Edit')),
               const PopupMenuItem(
-                  value: 'delete',
-                  child: Text('Delete', style: TextStyle(color: Colors.red))),
+                value: 'delete',
+                child: Text('Delete', style: TextStyle(color: Colors.red)),
+              ),
             ],
             icon: const Icon(Icons.more_vert, color: Colors.grey),
           ),

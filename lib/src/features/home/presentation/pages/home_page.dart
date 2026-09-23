@@ -46,8 +46,10 @@ class HomePage extends ConsumerWidget {
           onRefresh: () async {
             await ref.read(myMembershipsProvider.notifier).fetchMyMemberships();
             await ref.read(userProfileProvider.notifier).fetchProfile();
-            // Invalidate so the redeemed status refetches for the current shop
-            ref.invalidate(redemptionStatusProvider);
+            await ref.read(customerRedemptionsProvider.notifier).fetch();
+            ref.invalidate(
+              redemptionStatusProvider(selectedMembership?.shopName),
+            );
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),

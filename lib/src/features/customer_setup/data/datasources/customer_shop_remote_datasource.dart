@@ -12,6 +12,7 @@ abstract class CustomerShopRemoteDataSource {
   });
   Future<SingleCustomerShopModel> getSingleCustomerShop(String shopId);
   Future<Map<String, dynamic>> joinShop(String shopId);
+  Future<Map<String, dynamic>> joinShopWithQrCode(String qrCode);
   Future<List<MyMembershipModel>> getMyActiveMemberships();
   Future<Map<String, dynamic>> generateQrCode(String shopId);
 }
@@ -76,6 +77,23 @@ class CustomerShopRemoteDataSourceImpl implements CustomerShopRemoteDataSource {
     final response = await _api.post(
       '/membership/join-shop',
       data: {'shopId': shopId},
+    );
+
+    if (response.data != null && response.data['success'] == true) {
+      return response.data as Map<String, dynamic>;
+    }
+
+    final msg = (response.data is Map && response.data['message'] != null)
+        ? response.data['message']
+        : 'Failed to join shop';
+    throw Exception(msg);
+  }
+
+  @override
+  Future<Map<String, dynamic>> joinShopWithQrCode(String qrCode) async {
+    final response = await _api.post(
+      '/membership/join-shop-with-qr-code',
+      data: {'qrCode': qrCode},
     );
 
     if (response.data != null && response.data['success'] == true) {

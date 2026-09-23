@@ -6,4 +6,5 @@ export 'pages/redemption_history_page.dart';
 export 'widgets/widgets_export.dart';
 export '../data/models/customer_membership_model.dart';
 export 'controllers/customer_management_controller.dart';
+export 'controllers/redemption_history_controller.dart';
 

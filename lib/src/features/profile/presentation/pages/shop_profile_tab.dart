@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import '../../../../src_export.dart';
 import '../../../shop_setup/data/models/shop_model.dart';
 
@@ -121,12 +122,58 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
 
                     space8H,
 
-                    // ─── Shop Profile Menu Item ───
-                    // ProfileMenuItem(
-                    //   icon: Icons.person_outline,
-                    //   title: "Personal Information",
-                    //   onTap: () => context.push(AppRoutes.personalInfo),
-                    // ),
+                    ProfileMenuItem(
+                      icon: Icons.qr_code,
+                      title: "Show Qr Code",
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) {
+                            return AlertDialog(
+                              title: const Text("Shop QR Code"),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    shop!.qrCode!,
+                                    textAlign: TextAlign.center,
+                                  ),
+
+                                  const SizedBox(height: 16),
+
+                                  Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey.shade200,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: Colors.white,
+                                    ),
+                                    height: 300,
+                                    width: 300,
+                                    child: QrImageView(
+                                      data: shop.qrCode!,
+                                      version: QrVersions.auto,
+                                      size: 190,
+                                      backgroundColor: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(dialogContext).pop();
+                                  },
+                                  child: const Text("Close"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
                     space8H,
                     ProfileMenuItem(
                       icon: Icons.storefront,
@@ -350,4 +397,3 @@ class _ShopProfileTabState extends ConsumerState<ShopProfileTab> {
     );
   }
 }
-
