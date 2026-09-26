@@ -6,7 +6,7 @@ import 'local_storage_service.dart';
 class ApiService {
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'http://10.10.28.72:5050/api/v1',
+      baseUrl: 'http://16.16.220.76:5050/api/v1',
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       contentType: 'application/json',
