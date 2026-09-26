@@ -74,17 +74,13 @@ class CustomerVerificationCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
-                            color: isRedeemed
-                                ? const Color(0xFFFFE8E8)
-                                : const Color(0xFFE8F0E8),
+                            color: const Color(0xFFE8F0E8),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: CustomText(
-                            isRedeemed ? 'Already Redeemed' : memberStatus,
+                            isRedeemed ? 'Redeemed' : memberStatus,
                             fontSize: 10,
-                            color: isRedeemed
-                                ? Colors.red.shade700
-                                : AppColors.kSetupButtonColor,
+                            color: AppColors.kSetupButtonColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -96,27 +92,27 @@ class CustomerVerificationCard extends StatelessWidget {
             ],
           ),
 
-          // Redeemed warning banner
+          // Redeemed status banner
           if (isRedeemed) ...[
             space12H,
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.red.shade50,
+                color: const Color(0xFFE8F0E8),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.red.shade200),
+                border: Border.all(color: AppColors.kSetupButtonColor.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.warning_amber_rounded,
-                      size: 18, color: Colors.red.shade700),
+                  const Icon(Icons.check_circle_outline,
+                      size: 18, color: AppColors.kSetupButtonColor),
                   space8W,
-                  Expanded(
+                  const Expanded(
                     child: CustomText(
-                      "This customer has already redeemed today's drink.",
+                      "This code has been redeemed.",
                       variant: TextVariant.bodySmall,
-                      color: Colors.red.shade700,
+                      color: AppColors.kSetupButtonColor,
                     ),
                   ),
                 ],
@@ -127,32 +123,28 @@ class CustomerVerificationCard extends StatelessWidget {
           space24H,
           Container(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: isRedeemed
-                  ? const Color(0xFFFFF0F0)
-                  : const Color(0xFFE8F0E8),
+            decoration: const BoxDecoration(
+              color: Color(0xFFE8F0E8),
               shape: BoxShape.circle,
             ),
             child: Icon(
-              isRedeemed ? Icons.block : Icons.coffee,
+              isRedeemed ? Icons.check_circle : Icons.coffee,
               size: 36,
-              color: isRedeemed
-                  ? Colors.red.shade400
-                  : AppColors.kSetupButtonColor,
+              color: AppColors.kSetupButtonColor,
             ),
           ),
           space16H,
           CustomText(
-            isRedeemed ? "TODAY'S DRINK\nALREADY USED" : "TODAY'S DRINK\nAVAILABLE",
+            isRedeemed ? "DRINK\nREDEEMED" : "TODAY'S DRINK\nAVAILABLE",
             textAlign: TextAlign.center,
             variant: TextVariant.headlineMedium,
             fontWeight: FontWeight.bold,
-            color: isRedeemed ? Colors.red.shade500 : AppColors.kSetupButtonColor,
+            color: AppColors.kSetupButtonColor,
           ),
           space8H,
           CustomText(
             isRedeemed
-                ? "This customer has already redeemed today's drink. They are not eligible for another."
+                ? "This drink has been successfully redeemed."
                 : "This customer has not redeemed today's drink. They are eligible for any standard menu beverage.",
             textAlign: TextAlign.center,
             color: AppColors.kBrownTextColor,

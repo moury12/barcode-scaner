@@ -158,9 +158,9 @@ class _CustomerVerifiedPageState extends ConsumerState<CustomerVerifiedPage> {
                         ),
                       if (_isRedeemed)
                         CustomButton(
-                          text: "Already Redeemed",
-                          backgroundColor: Colors.red.shade400,
-                          icon: Icons.block,
+                          text: "Redeemed",
+                          backgroundColor: const Color(0xFF536148), // matching success green
+                          icon: Icons.check,
                           onPressed: null,
                         ),
                       space8H,

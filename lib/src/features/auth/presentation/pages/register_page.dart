@@ -11,11 +11,21 @@ class RegisterPage extends ConsumerStatefulWidget {
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  final _fullNameController = TextEditingController(text: kDebugMode ? "TestUser" : "");
-  final _emailController = TextEditingController(text: kDebugMode ? "renado4048@findize.com" : "");
-  final _phoneController = TextEditingController(text: kDebugMode ? "0123456789" : "");
-  final _passwordController = TextEditingController(text: kDebugMode ? "123456A" : "");
-  final _confirmPasswordController = TextEditingController(text: kDebugMode ? "123456A" : "");
+  final _fullNameController = TextEditingController(
+    text: kDebugMode ? "TestUser" : "",
+  );
+  final _emailController = TextEditingController(
+    text: kDebugMode ? "renado4048@findize.com" : "",
+  );
+  final _phoneController = TextEditingController(
+    text: kDebugMode ? "0123456789" : "",
+  );
+  final _passwordController = TextEditingController(
+    text: kDebugMode ? "123456A" : "",
+  );
+  final _confirmPasswordController = TextEditingController(
+    text: kDebugMode ? "123456A" : "",
+  );
 
   @override
   void dispose() {
@@ -31,11 +41,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     if (!_formKey.currentState!.validate()) return;
 
     if (_passwordController.text != _confirmPasswordController.text) {
-      CustomSnackbar.show(
-        context,
-        'Passwords do not match',
-        isError: true,
-      );
+      CustomSnackbar.show(context, 'Passwords do not match', isError: true);
       return;
     }
 
@@ -191,17 +197,20 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
               space12H,
               Center(
                 child: GestureDetector(
-                  onTap: () => context.pop(),
+                  onTap: () => context.push(AppRoutes.login),
                   child: RichText(
                     text: TextSpan(
                       text: "Already have an account? ",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.kBrownTextColor,
                       ),
-                      children: const [
+                      children: [
                         TextSpan(
+                          // onEnter: (e) {
+                          //   print("dfghdfgjhgdjkdfhgkjfdhk");
+                          // },
                           text: AppStaticStrings.logIn,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: AppColors.kAccentColor,
                             fontWeight: FontWeight.bold,
                           ),
